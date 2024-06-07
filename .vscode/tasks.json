@@ -36,14 +36,14 @@
 			"problemMatcher": "$msCompile"
 		},
 		{
-			"label": "watch",
+			"label": "DodgeTheCreeps-watch",
 			"command": "dotnet",
 			"type": "process",
 			"args": [
 				"watch",
 				"run",
 				"--project",
-				"${workspaceFolder}/GodotDemoProject/c-.sln"
+				"${workspaceFolder}/DodgeTheCreeps/DodgeTheCreeps.sln"
 			],
 			"problemMatcher": "$msCompile"
 		}

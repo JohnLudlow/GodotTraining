@@ -8,11 +8,11 @@
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach",
-            "processName": "Godot_v4.2.2-stable_mono_win64"
+            "processName": "godot"
         },
 
         {
-            "name": "Launch Godot",
+            "name": "Launch GodotDemoProject",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
