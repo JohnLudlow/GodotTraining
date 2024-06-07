@@ -26,11 +26,11 @@ public partial class Main : Node
 		
 		mob.Position = mobSpawnLocation.Position;
 		
-		var direction = (float)(mobSpawnLocation.Rotation + Math.PI / 2);
-		direction += (float)GD.RandRange(-Mathf.Pi / 4, Math.PI / 4);
+		var direction = mobSpawnLocation.Rotation + Mathf.Pi / 2;
+		direction += (float)GD.RandRange(-Mathf.Pi / 4, Mathf.Pi / 4);
 		mob.Rotation = direction;
 
-        mob.LinearVelocity = new Vector2((float)GD.RandRange(150.0, 250.0), 0);
+        mob.LinearVelocity = new Vector2((float)GD.RandRange(150.0, 250.0), 0).Rotated(direction);
 
 		AddChild(mob);
 	}
