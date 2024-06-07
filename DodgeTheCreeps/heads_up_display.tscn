@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbftgwak1pjbw"]
+
+[ext_resource type="FontFile" uid="uid://bgmtvefn4q3ma" path="res://assets/fonts/Xolonium-Regular.ttf" id="1_5ihy1"]
+[ext_resource type="Script" path="res://HeadsUpDisplay.cs" id="1_ni5so"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_vraa1"]
+action = &"start_game"
+
+[sub_resource type="Shortcut" id="Shortcut_vs7mq"]
+events = [SubResource("InputEventAction_vraa1")]
+
+[node name="HeadsUpDisplay" type="CanvasLayer"]
+script = ExtResource("1_ni5so")
+
+[node name="ScoreLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -22.5
+offset_right = 22.5
+offset_bottom = 78.0
+grow_horizontal = 2
+size_flags_horizontal = 8
+theme_override_fonts/font = ExtResource("1_5ihy1")
+theme_override_font_sizes/font_size = 64
+text = "0"
+horizontal_alignment = 2
+
+[node name="Message" type="Label" parent="."]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -39.0
+offset_bottom = 39.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_5ihy1")
+theme_override_font_sizes/font_size = 64
+text = "DODGE THE CREEPS!"
+horizontal_alignment = 1
+autowrap_mode = 2
+uppercase = true
+
+[node name="StartButton" type="Button" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -86.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_5ihy1")
+theme_override_font_sizes/font_size = 64
+shortcut = SubResource("Shortcut_vs7mq")
+text = "START"
+
+[node name="MessageTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="pressed" from="StartButton" to="." method="OnStartButtonPressed"]
+[connection signal="timeout" from="MessageTimer" to="." method="OnMessageTimerTimeout"]
