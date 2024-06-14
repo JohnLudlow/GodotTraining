@@ -44,7 +44,7 @@ public partial class Player : Area2D
 		{
 			var bullet = BulletScene.Instantiate<Bullet>();
 			bullet.Position = GetViewportRect().GetCenter();
-			bullet._IntegrateForces()
+			bullet.LinearVelocity = Position.Rotated(Rotation);
 		
 			AddChild(bullet);
 		}
