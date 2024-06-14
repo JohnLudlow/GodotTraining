@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://u4r4fbfdulsf"]
+
+[ext_resource type="Script" path="res://Player.cs" id="1_pwyq3"]
+[ext_resource type="Texture2D" uid="uid://nlhgusqules6" path="res://assets/art/spaceship.png" id="1_u6gkt"]
+[ext_resource type="PackedScene" uid="uid://djms1k4unqja2" path="res://Bullet.tscn" id="2_r8thn"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sb5c1"]
+radius = 56.0
+height = 120.0
+
+[node name="Player" type="Area2D"]
+scale = Vector2(0.5, 0.5)
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_pwyq3")
+BulletScene = ExtResource("2_r8thn")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_u6gkt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_sb5c1")

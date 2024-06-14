@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://bvukamgy7cjls"]
+
+[ext_resource type="Script" path="res://Main.cs" id="1_c025p"]
+[ext_resource type="PackedScene" uid="uid://u4r4fbfdulsf" path="res://Player.tscn" id="1_mkbcy"]
+[ext_resource type="PackedScene" uid="uid://coaeihgic4scx" path="res://Asteroid.tscn" id="2_c3voi"]
+
+[sub_resource type="Curve2D" id="Curve2D_gdw3v"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -57, -78, 0, 0, 0, 0, 1291, -82, 0, 0, 0, 0, 1291, 839, 0, 0, 0, 0, -58, 840, 0, 0, 0, 0, -57, -78)
+}
+point_count = 5
+
+[node name="Main" type="Node"]
+script = ExtResource("1_c025p")
+AsteroidScene = ExtResource("2_c3voi")
+
+[node name="Player" parent="." instance=ExtResource("1_mkbcy")]
+position = Vector2(600, 400)
+collision_mask = 3
+
+[node name="AsteroidTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+
+[node name="AsteroidPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_gdw3v")
+
+[node name="AsteroidSpawnLocation" type="PathFollow2D" parent="AsteroidPath"]
+position = Vector2(-57, -78)
+rotation = -0.00296735
+
+[connection signal="timeout" from="AsteroidTimer" to="." method="OnAsteroidTimerTimeout"]
