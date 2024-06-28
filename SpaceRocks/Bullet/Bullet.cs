@@ -1,5 +1,7 @@
 using Godot;
 
+namespace GodotTraining.SpaceRocks;
+
 public partial class Bullet : Area2D
 {
 	[Export]

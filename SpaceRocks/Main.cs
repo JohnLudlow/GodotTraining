@@ -1,11 +1,22 @@
+using System.Linq;
 using Godot;
+
+namespace GodotTraining.SpaceRocks;
 
 public partial class Main : Node
 {
+	private object locker = new object();
+
 	[Export]
 	public PackedScene RockScene { get; set; }
 
 	private Vector2 _screenSize = Vector2.Zero;
+
+	private int _level = 0;
+	private int _score = 0;
+	private bool _playing = false;
+
+	private HeadsUpDisplay _hud;
 	
 
 	// Called when the node enters the scene tree for the first time.
@@ -13,10 +24,41 @@ public partial class Main : Node
 	{
 		_screenSize = GetViewport().GetVisibleRect().Size;
 
-		for (var i = 0; i < 5; i++)
+		_hud = GetNode<HeadsUpDisplay>("HUD");
+	}
+
+	public async void NewGame(){
+		GetTree().CallGroup("rocks", "queue_free");
+		_level = 0;
+		_score = 0;
+		_hud.UpdateScore(_score);
+		await _hud.ShowMessage("Get Ready!");
+
+		GetNode<Player>("Player").Reset();
+
+		ToSignal(GetNode<Timer>("HUD/Timer"), Timer.SignalName.Timeout).GetResult();
+		_playing = true;
+	}
+
+	public async void NewLevel()
+	{
+		lock (locker)
 		{
-			SpawnRock(GD.RandRange(3, 5));
+			for (var i = 0; i < _level; i++)
+			{
+				SpawnRock(GD.RandRange(3, 5));
+			}
+
+			_level++;
 		}
+
+		await _hud.ShowMessage($"Wave {_level}");
+	}
+
+	public void GameOver()
+	{
+		_playing = false;
+		GetNode<HeadsUpDisplay>("HUD").GameOver();
 	}
 
 	private Vector2 GetRandomRockPosition()
@@ -42,7 +84,7 @@ public partial class Main : Node
 		);
 
 		rock.Exploded += explodedRock => {
-			if (explodedRock.Size < 1) return;
+			if (explodedRock.Size <= 1) return;
 
 			var player = GetNode<Player>("Player");
 
@@ -67,6 +109,11 @@ public partial class Main : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (!_playing) return;
 
+		if (!GetTree().GetNodesInGroup("rocks").Any())
+		{
+			NewLevel();
+		}
 	}
 }

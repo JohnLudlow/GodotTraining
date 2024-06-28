@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+namespace GodotTraining.SpaceRocks;
+
 public partial class Rock : RigidBody2D
 {
     float _scaleFactor = 0.2f;
@@ -31,19 +33,22 @@ public partial class Rock : RigidBody2D
 		GetNode<Sprite2D>("Explosion").Scale = Vector2.One * .75f * size;
 	}	
 
-	public void Explode()
+	public async void Explode()
 	{
 		var explosionPlayer = GetNode<AnimationPlayer>("Explosion/AnimationPlayer");
 		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred("disabled", true);
 		GetNode<Sprite2D>("Sprite2D").Hide();
 		GetNode<Sprite2D>("Explosion").Show();
 
-		explosionPlayer.AnimationFinished += new AnimationMixer.AnimationFinishedEventHandler(_ => QueueFree());
 		explosionPlayer.Play("Explosion");
 
+		EmitSignal(SignalName.Exploded, this);
 		LinearVelocity = Vector2.Zero;
 		AngularVelocity = 0;
-		EmitSignal(SignalName.Exploded, this);
+        
+		_ = await ToSignal(explosionPlayer, AnimationPlayer.SignalName.AnimationFinished);
+		
+		QueueFree();
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState2D state)
