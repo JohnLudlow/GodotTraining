@@ -1,6 +1,6 @@
 using Godot;
 
-namespace GodotTraining.SpaceRocks;
+using GodotTraining.SpaceRocks;
 
 public partial class Player : RigidBody2D
 {
@@ -69,7 +69,7 @@ public partial class Player : RigidBody2D
 		State = PlayerStates.Alive;
 	}
 
-	public void OnBodyEntered(Node2D body)
+	public void OnBodyEntered(Node body)
 	{
 		if (body.IsInGroup("rocks") && body is Rock rock)
 		{
@@ -78,6 +78,7 @@ public partial class Player : RigidBody2D
 			Explode();
 		}
 	}
+
 
 	public async void Explode()
 	{
@@ -163,19 +164,16 @@ public partial class Player : RigidBody2D
 
 	public override void _IntegrateForces(PhysicsDirectBodyState2D state)
 	{
+		var xform = state.Transform;
 		if (_resetPosition)
 		{
-			var xform = state.Transform;
 			xform.Origin = _screenSize / 2;
 			_resetPosition = false;
 		}
-		else
-		{
-			var xform = state.Transform;
-			xform.Origin.X = Mathf.Wrap(xform.Origin.X, 0, _screenSize.X);
-			xform.Origin.Y = Mathf.Wrap(xform.Origin.Y, 0, _screenSize.Y);
-			state.Transform = xform;
-		}
+
+		xform.Origin.X = Mathf.Wrap(xform.Origin.X, 0, _screenSize.X);
+		xform.Origin.Y = Mathf.Wrap(xform.Origin.Y, 0, _screenSize.Y);
+		state.Transform = xform;
 	}
 
 	public override void _PhysicsProcess(double delta)
