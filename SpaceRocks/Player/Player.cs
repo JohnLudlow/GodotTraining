@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 using Godot;
 
 using GodotTraining.SpaceRocks;
@@ -71,6 +73,7 @@ public partial class Player : RigidBody2D
 
 	public void OnBodyEntered(Node body)
 	{
+		Debug.WriteLine("collided with something!");
 		if (body.IsInGroup("rocks") && body is Rock rock)
 		{
 			rock.Explode();
