@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Diagnostics;
 
 namespace GodotTraining.SpaceRocks;
 
@@ -49,6 +50,14 @@ public partial class Rock : RigidBody2D
 		_ = await ToSignal(explosionPlayer, AnimationPlayer.SignalName.AnimationFinished);
 		
 		QueueFree();
+	}
+
+	public void OnBodyEntered(Node body)
+	{
+		if (body.IsInGroup("rocks") && body is Rock rock)
+		{
+			Debug.WriteLine("Explode!");
+		}
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState2D state)

@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c5fnnfqq8vjxs" path="res://Explosion/Explosion.tscn" id="4_4wgkh"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5mik6"]
-radius = 34.0147
+radius = 29.1548
 
 [node name="Player" type="RigidBody2D"]
 position = Vector2(300, 300)

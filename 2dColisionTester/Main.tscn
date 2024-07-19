@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2jleklvu78lc"]
+
+[ext_resource type="PackedScene" uid="uid://bbdpuwumtwme1" path="res://Collider.tscn" id="1_lktmy"]
+[ext_resource type="PackedScene" uid="uid://diqpcrd3hb22i" path="res://CollisionSensor.tscn" id="2_w3md0"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2my57"]
+
+[node name="Main" type="Node2D"]
+
+[node name="CollisionSensor" parent="." instance=ExtResource("2_w3md0")]
+position = Vector2(498, 421)
+physics_material_override = SubResource("PhysicsMaterial_2my57")
+gravity_scale = 0.0
+
+[node name="Collider" parent="." instance=ExtResource("1_lktmy")]
+position = Vector2(496, 70)
