@@ -83,7 +83,7 @@ public partial class Player : Area2D
 		else if (velocity.Y != 0)
 		{
 			animatedSprite2D.Animation = "up";
-			animatedSprite2D.FlipV = velocity.Y < 0;
+			animatedSprite2D.FlipV = velocity.Y > 0;
 		}
     }
 }
