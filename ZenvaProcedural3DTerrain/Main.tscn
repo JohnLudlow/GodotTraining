@@ -1,0 +1,66 @@
+[gd_scene load_steps=11 format=3 uid="uid://dwe1dpnpj2fg5"]
+
+[ext_resource type="Script" path="res://Assets/Procedural Generation/terrain_generation.gd" id="1_uacn4"]
+[ext_resource type="Script" path="res://Assets/Procedural Generation/spawnable_object.gd" id="2_5tqau"]
+[ext_resource type="PackedScene" uid="uid://cf1pwgl0y0mi6" path="res://Assets/Player Controller/Player.tscn" id="2_dk1rt"]
+[ext_resource type="PackedScene" uid="uid://dju443moxaprb" path="res://Assets/Models/Tree/Tree.tscn" id="3_s1c20"]
+[ext_resource type="PackedScene" uid="uid://crlk3u335xyr6" path="res://Assets/Models/Rock/Rock.tscn" id="4_vssja"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_s40ls"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_2di6d"]
+sky_material = SubResource("ProceduralSkyMaterial_s40ls")
+
+[sub_resource type="Environment" id="Environment_bnxy6"]
+background_mode = 2
+sky = SubResource("Sky_2di6d")
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.015
+volumetric_fog_emission = Color(0.399505, 0.665549, 0.812297, 1)
+adjustment_enabled = true
+adjustment_contrast = 1.1
+adjustment_saturation = 1.1
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_omop3"]
+seed = 8
+frequency = 0.003
+fractal_octaves = 10
+
+[sub_resource type="Curve" id="Curve_02ii6"]
+_data = [Vector2(0, 0), 0.0, 0.394425, 0, 0, Vector2(0.80212, 0.851429), 1.99033, 1.99033, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_bnxy6")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 382.196, 0)
+shadow_enabled = true
+
+[node name="TerrainGeneration" type="Node" parent="."]
+script = ExtResource("1_uacn4")
+noise = SubResource("FastNoiseLite_omop3")
+elevation_curve = SubResource("Curve_02ii6")
+
+[node name="SpawnableObject_Tree" type="Node" parent="TerrainGeneration"]
+script = ExtResource("2_5tqau")
+scenes_to_spawn = Array[PackedScene]([ExtResource("3_s1c20")])
+spawn_count = 150
+max_scale = 1.2
+
+[node name="SpawnableObject_Rock" type="Node" parent="TerrainGeneration"]
+script = ExtResource("2_5tqau")
+scenes_to_spawn = Array[PackedScene]([ExtResource("4_vssja")])
+spawn_count = 100
+min_scale = 5.0
+max_scale = 50.0
+
+[node name="Player" parent="." instance=ExtResource("2_dk1rt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.0398, 73.2625, 5.41429)

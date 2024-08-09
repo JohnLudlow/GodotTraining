@@ -102,7 +102,7 @@ public partial class HexTileMap : Node2D
             }
         );
 
-        DrawTerrain(baseNoiseMap, baseTerrainRanges, forestNoiseMap, forestNoiseMax / 10 * 7 , forestNoiseMax + .05f , TerrainTypes.Forest);
+        DrawOverrideTerrain(baseNoiseMap, baseTerrainRanges, forestNoiseMap, forestNoiseMax / 10 * 7 , forestNoiseMax + .05f , TerrainTypes.Forest);
 
         var (desertNoiseMax, desertNoiseMap) = MakeSomeNoise(
             new FastNoiseLite
@@ -115,7 +115,7 @@ public partial class HexTileMap : Node2D
             }
         );
 
-        DrawTerrain(baseNoiseMap, baseTerrainRanges, desertNoiseMap, desertNoiseMax / 10 * 5 , desertNoiseMax + .05f , TerrainTypes.Desert);
+        DrawOverrideTerrain(baseNoiseMap, baseTerrainRanges, desertNoiseMap, desertNoiseMax / 10 * 5 , desertNoiseMax + .05f , TerrainTypes.Desert);
 
         var (mountainNoiseMax, mountainNoiseMap) = MakeSomeNoise(
             new FastNoiseLite
@@ -128,7 +128,7 @@ public partial class HexTileMap : Node2D
             }
         );
 
-        DrawTerrain(baseNoiseMap, baseTerrainRanges, mountainNoiseMap, mountainNoiseMax / 10 * 5 , mountainNoiseMax + .05f , TerrainTypes.Mountain);
+        DrawOverrideTerrain(baseNoiseMap, baseTerrainRanges, mountainNoiseMap, mountainNoiseMax / 10 * 5 , mountainNoiseMax + .05f , TerrainTypes.Mountain);
 
         DrawIceCap(rand);
     }
@@ -149,7 +149,7 @@ public partial class HexTileMap : Node2D
         }
     }
 
-    private void DrawTerrain(
+    private void DrawOverrideTerrain(
         float[,] baseNoiseMap,
         IEnumerable<(float min, float max, TerrainTypes terrainType)> baseTerrainRanges,
         float[,] overrideNoiseMap,
