@@ -10,11 +10,15 @@ var use_falloff : bool = true
 
 @export var noise : FastNoiseLite 
 @export var elevation_curve : Curve 
+@export var water_level : float = .2
 
 var falloff_image : Image
 
 @onready var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 var spawnable_objects : Array[SpawnableObject]
+@onready var water : MeshInstance3D = get_node("Water")
+
+@onready var nav_region : NavigationRegion3D = get_node("NavigationRegion3D")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -63,8 +67,13 @@ func generate_mesh():
     mesh.add_to_group("NavSource")
     add_child(mesh)
 
+    water.position.y = water_level * max_height
+
     for i in spawnable_objects:
         spawn_objects(i)
+
+    nav_region.bake_navigation_mesh()
+    await nav_region.bake_finished
 
 func get_noise_y(x, z) -> float:
     var val = noise.get_noise_2d(x, z)
@@ -92,9 +101,13 @@ func get_random_position() -> Vector3:
 func spawn_objects (spawnable: SpawnableObject):
     for i in range(spawnable.spawn_count):
 
+        var pos = get_random_position()
+        while pos.y < water_level * max_height:
+            pos = get_random_position()
+
         var obj = spawnable.scenes_to_spawn[rng.randi() % spawnable.scenes_to_spawn.size()].instantiate()
         obj.add_to_group("NavSource")
-        obj.position = get_random_position()
+        obj.position = pos
         obj.scale = Vector3.ONE * rng.randf_range(spawnable.min_scale, spawnable.min_scale)
         obj.rotation_degrees.y = rng.randf_range(0, 360)
 
