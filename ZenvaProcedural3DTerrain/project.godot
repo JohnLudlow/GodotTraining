@@ -14,6 +14,7 @@ config/name="ZenvaProceduralGeneration"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
+config/tags=PackedStringArray("gdscript", "zenva")
 
 [display]
 
