@@ -1,43 +1,71 @@
 using Godot;
-using System;
+
+namespace Udemy25dRpg.Scenes.Characters;
 
 public partial class Player : CharacterBody3D
 {
-	public const float Speed = 5.0f;
-	public const float JumpVelocity = 4.5f;
+	public enum PlayerInputs {
+		MoveLeft,
+		MoveRight,
+		MoveForward,
+		MoveBackward
+	}
 
-	public override void _PhysicsProcess(double delta)
+	public enum PlayerAnimations {
+		Idle,
+		Move,
+	}
+
+	[Export]
+	public StateMachine StateMachineNode { get; private set; }
+
+	[Export, ExportGroup("Required Nodes")] 
+	public AnimationPlayer AnimationPlayerNode {get; private set;}
+	
+	[Export, ExportGroup("Required Nodes")] 
+	public Sprite3D SpriteNode {get; private set;}
+
+	public Vector2 Direction {get; private set;} = Vector2.Zero;
+
+
+    public override void _Ready()
+    {
+        StateMachineNode.SwitchState<PlayerIdleState>();
+    }
+
+    public override void _PhysicsProcess(double delta)
 	{
-		Vector3 velocity = Velocity;
+		Velocity = new(
+			Direction.X * 5, 
+			0, 
+			Direction.Y * 5
+		);
 
-		// Add the gravity.
-		if (!IsOnFloor())
-		{
-			velocity += GetGravity() * (float)delta;
-		}
-
-		// Handle Jump.
-		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-		{
-			velocity.Y = JumpVelocity;
-		}
-
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		Vector2 inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		if (direction != Vector3.Zero)
-		{
-			velocity.X = direction.X * Speed;
-			velocity.Z = direction.Z * Speed;
-		}
-		else
-		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
-		}
-
-		Velocity = velocity;
 		MoveAndSlide();
 	}
+
+    public override void _Input(InputEvent @event)
+    {
+		Direction = Input.GetVector(
+			nameof(PlayerInputs.MoveLeft), 
+			nameof(PlayerInputs.MoveRight), 
+			nameof(PlayerInputs.MoveForward), 
+			nameof(PlayerInputs.MoveBackward)
+		);
+
+		FlipSprite();
+    }
+
+    private void FlipSprite()
+    {
+        if (Direction.X < 0)
+        {
+            SpriteNode.FlipH = true;
+        }
+        else if (Direction.X > 0)
+        {
+            SpriteNode.FlipH = false;
+        }
+    }
+
 }
