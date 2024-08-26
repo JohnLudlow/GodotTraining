@@ -2,36 +2,43 @@ using Godot;
 
 namespace Udemy25dRpg.Scenes.Characters;
 
-public partial class PlayerMoveState : Node
+public partial class PlayerMoveState : PlayerStateBase
 {
-    private Player _characterNode;
-
-    public override void _Ready()
-    {
-        _characterNode = GetOwner<Player>();
-        SetPhysicsProcess(false);
-    }
+    [Export(PropertyHint.Range, "0, 30, .1")]
+    public float MoveFactor {get; private set;} = 5f;
 
     public override void _PhysicsProcess(double delta)
     {
         if (_characterNode.Direction == Vector2.Zero)
         {
             _characterNode.StateMachineNode.SwitchState<PlayerIdleState>();
-        }
+            return;
+        }        
+
+        _characterNode.Velocity = new(
+			_characterNode.Direction.X * MoveFactor, 
+			0, 
+			_characterNode.Direction.Y * MoveFactor
+		);
+
+		_characterNode.MoveAndSlide();
+        _characterNode.FlipSprite();
     }
 
-    public override void _Notification(int what)
-    {        
-        base._Notification(what);
+    protected override void EnterState()
+    {
+        _characterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Move));
+    }
 
-        if (what == (int)StateMachine.StateMachineMessages.EnableState)
+    public override void _Input(InputEvent @event)
+    {
+        if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Dash)))
         {
-            _characterNode.AnimationPlayerNode.Play(nameof(Player.PlayerAnimations.Move));
-            SetPhysicsProcess(true);
+            _characterNode.StateMachineNode.SwitchState<PlayerDashState>();
         }
-        else if (what == (int)StateMachine.StateMachineMessages.DisableState)
+        else if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Kick)))
         {
-            SetPhysicsProcess(false);
+            _characterNode.StateMachineNode.SwitchState<PlayerKickingState>();
         }
     }
 }

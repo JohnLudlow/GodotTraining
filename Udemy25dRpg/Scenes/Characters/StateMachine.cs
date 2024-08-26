@@ -11,12 +11,12 @@ public partial class StateMachine : Node
     }
 
     [Export]
-    public Node CurrentState { get; set; }
+    public PlayerStateBase CurrentState { get; private set; }
 
     [Export]
-    public Node[] PossibleStates {get; private set;}
+    public PlayerStateBase[] PossibleStates {get; private set;}
 
-    public void SwitchState<TState>() where TState : Node
+    public void SwitchState<TState>() where TState : PlayerStateBase
     {
         var newState = PossibleStates.OfType<TState>().FirstOrDefault();
 

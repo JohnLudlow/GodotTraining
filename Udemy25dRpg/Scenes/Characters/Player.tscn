@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://2als0j8j6wxe"]
+[gd_scene load_steps=56 format=3 uid="uid://2als0j8j6wxe"]
 
 [ext_resource type="Script" path="res://Scenes/Characters/Player.cs" id="1_huxwr"]
 [ext_resource type="Texture2D" uid="uid://y4hs6pyks4tw" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_000.png" id="2_2r0yv"]
@@ -26,115 +26,229 @@
 [ext_resource type="Texture2D" uid="uid://bbh1ybwfopd2l" path="res://Assets/Sprites/Characters/Player/Running/Running_004.png" id="24_mfk1q"]
 [ext_resource type="Texture2D" uid="uid://lgwqg27pcm7e" path="res://Assets/Sprites/Characters/Player/Running/Running_005.png" id="25_f3408"]
 [ext_resource type="Texture2D" uid="uid://d1kr8nrpaysjx" path="res://Assets/Sprites/Characters/Player/Running/Running_006.png" id="26_l8clm"]
+[ext_resource type="Texture2D" uid="uid://nl6eh3k7jex4" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_000.png" id="26_ou41i"]
+[ext_resource type="Texture2D" uid="uid://75egxtvtldom" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_001.png" id="27_4gmpt"]
 [ext_resource type="Texture2D" uid="uid://b4bjaxiy3c8xu" path="res://Assets/Sprites/Characters/Player/Running/Running_007.png" id="27_upi8d"]
 [ext_resource type="Texture2D" uid="uid://crc78osoffq5n" path="res://Assets/Sprites/Characters/Player/Running/Running_009.png" id="28_10fk6"]
+[ext_resource type="Texture2D" uid="uid://ca5poo205xpqk" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_002.png" id="28_dvjhk"]
+[ext_resource type="Texture2D" uid="uid://c8awvf3gbdeoo" path="res://Assets/Sprites/Characters/Player/Running/Running_008.png" id="28_e5uih"]
+[ext_resource type="Texture2D" uid="uid://dmmdl8av8vnjh" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_003.png" id="29_i8hfx"]
 [ext_resource type="Texture2D" uid="uid://c1ul17mmjdtrr" path="res://Assets/Sprites/Characters/Player/Running/Running_010.png" id="29_q8a1u"]
 [ext_resource type="Texture2D" uid="uid://qllkdhs3ann1" path="res://Assets/Sprites/Characters/Player/Running/Running_011.png" id="30_68kny"]
+[ext_resource type="Texture2D" uid="uid://c0e2lkwh8pug8" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_004.png" id="30_qlj7e"]
+[ext_resource type="Texture2D" uid="uid://iw1x6vq1koq3" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_005.png" id="31_d7bf5"]
 [ext_resource type="Texture2D" uid="uid://cfdxw0sp2nvjx" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_000.png" id="31_mg83m"]
 [ext_resource type="Script" path="res://Scenes/Characters/PlayerIdleState.cs" id="31_w18mu"]
+[ext_resource type="Texture2D" uid="uid://ch2kjq2341kk5" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_006.png" id="32_dq8nx"]
 [ext_resource type="Texture2D" uid="uid://cgqfsw1vb5hxj" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_001.png" id="32_gvagx"]
 [ext_resource type="Script" path="res://Scenes/Characters/PlayerMoveState.cs" id="32_vc70e"]
 [ext_resource type="Script" path="res://Scenes/Characters/StateMachine.cs" id="33_8uwin"]
 [ext_resource type="Texture2D" uid="uid://ce21e5068dl3o" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_002.png" id="33_aoq6e"]
+[ext_resource type="Texture2D" uid="uid://buk3jem1k5h35" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_007.png" id="33_uuuus"]
 [ext_resource type="Texture2D" uid="uid://cuvd240px1abr" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_003.png" id="34_356xb"]
+[ext_resource type="Texture2D" uid="uid://dpfxmgacf2si8" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_008.png" id="34_dsv52"]
+[ext_resource type="Texture2D" uid="uid://b44c51mgblifd" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_009.png" id="35_6xrls"]
 [ext_resource type="Texture2D" uid="uid://d2i35uyqiwilh" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_004.png" id="35_43qmd"]
+[ext_resource type="Texture2D" uid="uid://d25iiuab77jhw" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_010.png" id="36_06eso"]
 [ext_resource type="Texture2D" uid="uid://bdv4ygt2vid7x" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_005.png" id="36_vn2yp"]
+[ext_resource type="Texture2D" uid="uid://dbgjebrr1akou" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_011.png" id="37_flpgl"]
+[ext_resource type="Script" path="res://Scenes/Characters/PlayerDashState.cs" id="41_7ie7a"]
+[ext_resource type="Script" path="res://Scenes/Characters/PlayerKickingState.cs" id="54_s5rbi"]
 
-[sub_resource type="Animation" id="Animation_yuolr"]
-resource_name = "Idle"
-loop_mode = 1
-step = 0.0555556
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0555556, 0.111111, 0.166667, 0.222222, 0.277778, 0.333333, 0.388889, 0.444444, 0.5, 0.555556, 0.611111, 0.666667, 0.722222, 0.777778, 0.833333, 0.888889, 0.944444),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("2_2r0yv"), ExtResource("3_5244l"), ExtResource("4_w2fvd"), ExtResource("5_02man"), ExtResource("6_n1o0m"), ExtResource("7_jiwfe"), ExtResource("8_4t3w0"), ExtResource("9_qjern"), ExtResource("10_4du0f"), ExtResource("11_1j7to"), ExtResource("12_t04pj"), ExtResource("13_4o6oj"), ExtResource("14_ajd7b"), ExtResource("15_tjtiv"), ExtResource("16_ct13p"), ExtResource("17_re4aw"), ExtResource("18_jmelb"), ExtResource("19_yuvqx")]
-}
+[sub_resource type="SpriteFrames" id="SpriteFrames_4gqhn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_mg83m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_gvagx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_aoq6e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_356xb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_43qmd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_vn2yp")
+}],
+"loop": true,
+"name": &"Dash",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_2r0yv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_5244l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_w2fvd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_02man")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_n1o0m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_jiwfe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_4t3w0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_qjern")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_4du0f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_1j7to")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_t04pj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_4o6oj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ajd7b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_tjtiv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_ct13p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_re4aw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_jmelb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_yuvqx")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 18.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_ou41i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_4gmpt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_dvjhk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_i8hfx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_qlj7e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_d7bf5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_dq8nx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_uuuus")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_dsv52")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_6xrls")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_06eso")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_flpgl")
+}],
+"loop": false,
+"name": &"Kick",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_3j4q8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_nq7ji")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_vnyog")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_x6dpw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_mfk1q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_f3408")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_l8clm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_upi8d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_e5uih")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_10fk6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_q8a1u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_68kny")
+}],
+"loop": true,
+"name": &"Move",
+"speed": 12.0
+}]
 
-[sub_resource type="Animation" id="Animation_4bcn0"]
-resource_name = "Move"
-loop_mode = 1
-step = 0.0833333
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0909091, 0.181818, 0.272727, 0.272827, 0.363636, 0.454545, 0.545455, 0.545555, 0.636364, 0.727273, 0.818182, 0.909091),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("20_3j4q8"), ExtResource("21_nq7ji"), ExtResource("22_vnyog"), ExtResource("2_2r0yv"), ExtResource("23_x6dpw"), ExtResource("24_mfk1q"), ExtResource("25_f3408"), ExtResource("2_2r0yv"), ExtResource("26_l8clm"), ExtResource("27_upi8d"), ExtResource("28_10fk6"), ExtResource("29_q8a1u"), ExtResource("30_68kny")]
-}
-
-[sub_resource type="Animation" id="Animation_2bk11"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_2r0yv")]
-}
-
-[sub_resource type="Animation" id="Animation_hldm5"]
-resource_name = "Slide"
-step = 0.166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.166667, 0.333333, 0.5, 0.666667, 0.833333),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("31_mg83m"), ExtResource("32_gvagx"), ExtResource("33_aoq6e"), ExtResource("34_356xb"), ExtResource("35_43qmd"), ExtResource("36_vn2yp")]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_45f0w"]
-_data = {
-"Idle": SubResource("Animation_yuolr"),
-"Move": SubResource("Animation_4bcn0"),
-"RESET": SubResource("Animation_2bk11"),
-"Slide": SubResource("Animation_hldm5")
-}
-
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimationPlayerNode", "SpriteNode")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode")]
 script = ExtResource("1_huxwr")
 StateMachineNode = NodePath("StateMachine")
-AnimationPlayerNode = NodePath("AnimationPlayer")
-SpriteNode = NodePath("")
+AnimatedSprite3DNode = NodePath("AnimatedSprite3D")
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
-texture_filter = 0
-texture = ExtResource("2_2r0yv")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_45f0w")
-}
-
-[node name="IdleState" type="Node" parent="."]
-script = ExtResource("31_w18mu")
-
-[node name="MoveState" type="Node" parent="."]
-script = ExtResource("32_vc70e")
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+sprite_frames = SubResource("SpriteFrames_4gqhn")
+animation = &"Kick"
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("CurrentState", "PossibleStates")]
 script = ExtResource("33_8uwin")
-CurrentState = NodePath(".")
-PossibleStates = [NodePath("../IdleState"), NodePath("../MoveState")]
+CurrentState = NodePath("IdleState")
+PossibleStates = [NodePath("IdleState"), NodePath("MoveState"), NodePath("DashState"), NodePath("KickingState")]
+
+[node name="IdleState" type="Node" parent="StateMachine"]
+script = ExtResource("31_w18mu")
+
+[node name="MoveState" type="Node" parent="StateMachine"]
+script = ExtResource("32_vc70e")
+
+[node name="DashState" type="Node" parent="StateMachine" node_paths=PackedStringArray("DashTimer")]
+script = ExtResource("41_7ie7a")
+DashTimer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="StateMachine/DashState"]
+wait_time = 0.5
+one_shot = true
+
+[node name="KickingState" type="Node" parent="StateMachine"]
+script = ExtResource("54_s5rbi")

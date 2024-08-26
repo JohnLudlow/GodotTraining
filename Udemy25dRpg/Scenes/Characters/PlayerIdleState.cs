@@ -2,13 +2,15 @@ using Godot;
 
 namespace Udemy25dRpg.Scenes.Characters;
 
-public partial class PlayerIdleState : Node
+public partial class PlayerIdleState : PlayerStateBase
 {
-    private Player _characterNode;
-
     public override void _Ready()
     {
-        _characterNode = GetOwner<Player>();                
+        base._Ready();
+
+        _characterNode.AnimatedSprite3DNode.AnimationFinished += () => {             
+            _characterNode.StateMachineNode.SwitchState<PlayerIdleState>(); 
+        };
     }
 
     public override void _PhysicsProcess(double delta)
@@ -19,18 +21,20 @@ public partial class PlayerIdleState : Node
         }
     }
 
-    public override void _Notification(int what)
-    {        
-        base._Notification(what);
+    protected override void EnterState()
+    {
+        _characterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Idle));
+    }
 
-        if (what == 5001)
+    public override void _Input(InputEvent @event)
+    {
+        if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Dash)))
         {
-            _characterNode.AnimationPlayerNode.Play(nameof(Player.PlayerAnimations.Idle));
-            SetPhysicsProcess(true);
+            _characterNode.StateMachineNode.SwitchState<PlayerDashState>();
         }
-        else if (what == 5002)
+        else if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Kick)))
         {
-            SetPhysicsProcess(false);
+            _characterNode.StateMachineNode.SwitchState<PlayerKickingState>();
         }
     }
 }

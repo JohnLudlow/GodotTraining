@@ -8,22 +8,24 @@ public partial class Player : CharacterBody3D
 		MoveLeft,
 		MoveRight,
 		MoveForward,
-		MoveBackward
+		MoveBackward,
+		Dash,
+		Kick,
 	}
 
 	public enum PlayerAnimations {
 		Idle,
 		Move,
+		Dash,
+		Kick,
 	}
 
-	[Export]
+
+	[Export, ExportGroup("Required Nodes")]
 	public StateMachine StateMachineNode { get; private set; }
 
-	[Export, ExportGroup("Required Nodes")] 
-	public AnimationPlayer AnimationPlayerNode {get; private set;}
-	
-	[Export, ExportGroup("Required Nodes")] 
-	public Sprite3D SpriteNode {get; private set;}
+  	[Export, ExportGroup("Required Nodes")]
+	public AnimatedSprite3D AnimatedSprite3DNode {get; private set;}
 
 	public Vector2 Direction {get; private set;} = Vector2.Zero;
 
@@ -33,17 +35,6 @@ public partial class Player : CharacterBody3D
         StateMachineNode.SwitchState<PlayerIdleState>();
     }
 
-    public override void _PhysicsProcess(double delta)
-	{
-		Velocity = new(
-			Direction.X * 5, 
-			0, 
-			Direction.Y * 5
-		);
-
-		MoveAndSlide();
-	}
-
     public override void _Input(InputEvent @event)
     {
 		Direction = Input.GetVector(
@@ -52,19 +43,17 @@ public partial class Player : CharacterBody3D
 			nameof(PlayerInputs.MoveForward), 
 			nameof(PlayerInputs.MoveBackward)
 		);
-
-		FlipSprite();
     }
 
-    private void FlipSprite()
+    public void FlipSprite()
     {
         if (Direction.X < 0)
         {
-            SpriteNode.FlipH = true;
+            AnimatedSprite3DNode.FlipH = true;
         }
         else if (Direction.X > 0)
         {
-            SpriteNode.FlipH = false;
+            AnimatedSprite3DNode.FlipH = false;
         }
     }
 
