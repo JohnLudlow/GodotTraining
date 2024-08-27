@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddbyobavomtwo"]
+
+[ext_resource type="PackedScene" uid="uid://c8q0hkn5nx4sl" path="res://Assets/Models/Dungeon/gltf/floor_tile_small.gltf.glb" id="1_3f3qu"]
+[ext_resource type="PackedScene" uid="uid://dpr3mjdk40034" path="res://Assets/Models/Dungeon/gltf/wall.gltf.glb" id="2_btngh"]
+
+[node name="Tiles" type="Node3D"]
+
+[node name="floor_tile_small_gltf" parent="." instance=ExtResource("1_3f3qu")]
+
+[node name="wall_gltf" parent="." instance=ExtResource("2_btngh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.09233, 0, 0)

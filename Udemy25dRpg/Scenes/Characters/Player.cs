@@ -24,7 +24,7 @@ public partial class Player : CharacterBody3D
 	[Export, ExportGroup("Required Nodes")]
 	public StateMachine StateMachineNode { get; private set; }
 
-  	[Export, ExportGroup("Required Nodes")]
+	[Export, ExportGroup("Required Nodes")]
 	public AnimatedSprite3D AnimatedSprite3DNode {get; private set;}
 
 	public Vector2 Direction {get; private set;} = Vector2.Zero;
