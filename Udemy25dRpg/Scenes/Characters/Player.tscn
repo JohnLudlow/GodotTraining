@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://2als0j8j6wxe"]
+[gd_scene load_steps=57 format=3 uid="uid://2als0j8j6wxe"]
 
 [ext_resource type="Script" path="res://Scenes/Characters/Player.cs" id="1_huxwr"]
 [ext_resource type="Texture2D" uid="uid://y4hs6pyks4tw" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_000.png" id="2_2r0yv"]
@@ -222,12 +222,18 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5puhm"]
+radius = 0.501583
+height = 1.4337
+
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode")]
+collision_layer = 2
 script = ExtResource("1_huxwr")
 StateMachineNode = NodePath("StateMachine")
 AnimatedSprite3DNode = NodePath("AnimatedSprite3D")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+pixel_size = 0.0025
 sprite_frames = SubResource("SpriteFrames_4gqhn")
 animation = &"Kick"
 
@@ -252,3 +258,7 @@ one_shot = true
 
 [node name="KickingState" type="Node" parent="StateMachine"]
 script = ExtResource("54_s5rbi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0281069, 0.0163012, -0.00011313)
+shape = SubResource("CapsuleShape3D_5puhm")
