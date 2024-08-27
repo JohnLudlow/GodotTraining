@@ -12,7 +12,7 @@ script = ExtResource("1_erktu")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.9068, 2.5, 10.3985)
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 0.900964, 0.433895, 0, -0.433895, 0.900964, -0.486895, 3.65773, 5.63229)
+transform = Transform3D(1, 0, 0, 0, 0.900964, 0.433895, 0, -0.433895, 0.900964, -0.907679, 2.19887, 4.17001)
 current = true
 
 [node name="Environment" type="Node3D" parent="."]
