@@ -23,6 +23,7 @@ public partial class PlayerDashState : PlayerStateBase
     public override void _PhysicsProcess(double delta)
     {
 		_characterNode.MoveAndSlide();
+        _characterNode.ApplyFloorSnap();
         _characterNode.FlipSprite();
     }
 

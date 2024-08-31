@@ -22,6 +22,7 @@ public partial class PlayerMoveState : PlayerStateBase
 		);
 
 		_characterNode.MoveAndSlide();
+		_characterNode.ApplyFloorSnap();        
         _characterNode.FlipSprite();
     }
 
