@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://chsjgdc42gn10"]
+
+[ext_resource type="Script" path="res://Scenes/Characters/StateMachine.cs" id="1_l8hxj"]
+
+[node name="StateMachine" type="Node" node_paths=PackedStringArray("CurrentState", "PossibleStates")]
+script = ExtResource("1_l8hxj")
+CurrentState = NodePath("")
+PossibleStates = [null, null, null, null]

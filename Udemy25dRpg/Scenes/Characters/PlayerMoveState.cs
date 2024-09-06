@@ -5,7 +5,7 @@ namespace Udemy25dRpg.Scenes.Characters;
 public partial class PlayerMoveState : PlayerStateBase
 {
     [Export(PropertyHint.Range, "0, 30, .1")]
-    public float MoveFactor {get; private set;} = 5f;
+    public float MoveFactor { get; private set; } = 5f;
 
     public override void _PhysicsProcess(double delta)
     {
@@ -13,16 +13,16 @@ public partial class PlayerMoveState : PlayerStateBase
         {
             _characterNode.StateMachineNode.SwitchState<PlayerIdleState>();
             return;
-        }        
+        }
 
         _characterNode.Velocity = new(
-			_characterNode.Direction.X * MoveFactor, 
-			0, 
-			_characterNode.Direction.Y * MoveFactor
-		);
+            _characterNode.Direction.X * MoveFactor,
+            0,
+            _characterNode.Direction.Y * MoveFactor
+        );
 
-		_characterNode.MoveAndSlide();
-		_characterNode.ApplyFloorSnap();        
+        _characterNode.MoveAndSlide();
+        _characterNode.ApplyFloorSnap();
         _characterNode.FlipSprite();
     }
 

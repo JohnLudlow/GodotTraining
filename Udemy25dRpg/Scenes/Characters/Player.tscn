@@ -42,7 +42,6 @@
 [ext_resource type="Texture2D" uid="uid://ch2kjq2341kk5" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_006.png" id="32_dq8nx"]
 [ext_resource type="Texture2D" uid="uid://cgqfsw1vb5hxj" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_001.png" id="32_gvagx"]
 [ext_resource type="Script" path="res://Scenes/Characters/PlayerMoveState.cs" id="32_vc70e"]
-[ext_resource type="Script" path="res://Scenes/Characters/StateMachine.cs" id="33_8uwin"]
 [ext_resource type="Texture2D" uid="uid://ce21e5068dl3o" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_002.png" id="33_aoq6e"]
 [ext_resource type="Texture2D" uid="uid://buk3jem1k5h35" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_007.png" id="33_uuuus"]
 [ext_resource type="Texture2D" uid="uid://cuvd240px1abr" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_003.png" id="34_356xb"]
@@ -53,6 +52,7 @@
 [ext_resource type="Texture2D" uid="uid://bdv4ygt2vid7x" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_005.png" id="36_vn2yp"]
 [ext_resource type="Texture2D" uid="uid://dbgjebrr1akou" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_011.png" id="37_flpgl"]
 [ext_resource type="Script" path="res://Scenes/Characters/PlayerDashState.cs" id="41_7ie7a"]
+[ext_resource type="PackedScene" uid="uid://chsjgdc42gn10" path="res://Scenes/Characters/StateMachine.tscn" id="50_wog05"]
 [ext_resource type="Script" path="res://Scenes/Characters/PlayerKickingState.cs" id="54_s5rbi"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4gqhn"]
@@ -226,13 +226,12 @@ animations = [{
 radius = 0.501583
 height = 1.4337
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("AnimatedSprite3DNode")]
 collision_layer = 2
 collision_mask = 7
 floor_max_angle = 1.55334
 floor_snap_length = 100.0
 script = ExtResource("1_huxwr")
-StateMachineNode = NodePath("StateMachine")
 AnimatedSprite3DNode = NodePath("AnimatedSprite3D")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
@@ -240,18 +239,20 @@ pixel_size = 0.0025
 sprite_frames = SubResource("SpriteFrames_4gqhn")
 animation = &"Kick"
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("CurrentState", "PossibleStates")]
-script = ExtResource("33_8uwin")
+[node name="StateMachine" parent="." node_paths=PackedStringArray("CurrentState", "PossibleStates") instance=ExtResource("50_wog05")]
 CurrentState = NodePath("IdleState")
 PossibleStates = [NodePath("IdleState"), NodePath("MoveState"), NodePath("DashState"), NodePath("KickingState")]
 
 [node name="IdleState" type="Node" parent="StateMachine"]
+unique_name_in_owner = true
 script = ExtResource("31_w18mu")
 
 [node name="MoveState" type="Node" parent="StateMachine"]
+unique_name_in_owner = true
 script = ExtResource("32_vc70e")
 
 [node name="DashState" type="Node" parent="StateMachine" node_paths=PackedStringArray("DashTimer")]
+unique_name_in_owner = true
 script = ExtResource("41_7ie7a")
 DashTimer = NodePath("Timer")
 
@@ -260,6 +261,7 @@ wait_time = 0.5
 one_shot = true
 
 [node name="KickingState" type="Node" parent="StateMachine"]
+unique_name_in_owner = true
 script = ExtResource("54_s5rbi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
