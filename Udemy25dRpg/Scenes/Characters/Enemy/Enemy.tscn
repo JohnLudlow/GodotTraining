@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=3 uid="uid://26cy6bbsdt37"]
+[gd_scene load_steps=107 format=3 uid="uid://26cy6bbsdt37"]
 
 [ext_resource type="Texture2D" uid="uid://ckonrd67f8enh" path="res://Assets/Sprites/Characters/Enemy Knight/Attack/0_Demons_of_Darkness_Slashing_000.png" id="1_gty22"]
 [ext_resource type="Texture2D" uid="uid://cjdjjbuattvtu" path="res://Assets/Sprites/Characters/Enemy Knight/Idle/0_Demons_of_Darkness_Idle_000.png" id="1_le6bp"]
@@ -102,6 +102,8 @@
 [ext_resource type="Texture2D" uid="uid://b4pv0ny4xgeme" path="res://Assets/Sprites/Characters/Enemy Knight/TakeHit/0_Demons_of_Darkness_Hurt_011.png" id="99_5kr26"]
 [ext_resource type="PackedScene" uid="uid://chsjgdc42gn10" path="res://Scenes/Characters/StateMachine.tscn" id="101_svyoj"]
 [ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyIdleState.cs" id="102_d6q6i"]
+[ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyReturnState.cs" id="103_k2nhi"]
+[ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyPatrolState.cs" id="104_0iq21"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nl2d3"]
 animations = [{
@@ -432,7 +434,7 @@ animations = [{
 radius = 0.549619
 height = 1.29953
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode")]
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode", "NavigationAgentNode")]
 collision_layer = 4
 collision_mask = 7
 floor_max_angle = 1.55334
@@ -440,19 +442,29 @@ floor_snap_length = 100.0
 script = ExtResource("1_tph2b")
 StateMachineNode = NodePath("StateMachine")
 AnimatedSprite3DNode = NodePath("AnimatedSprite3D")
+NavigationAgentNode = NodePath("NavigationAgent3D")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 pixel_size = 0.0025
 sprite_frames = SubResource("SpriteFrames_nl2d3")
-animation = &"Idle"
+animation = &"Move"
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("CurrentState", "PossibleStates") instance=ExtResource("101_svyoj")]
 CurrentState = NodePath("IdleState")
-PossibleStates = [NodePath("IdleState"), NodePath(""), NodePath("")]
+PossibleStates = [NodePath("IdleState"), NodePath("ReturnState"), NodePath("PatrolState")]
 
 [node name="IdleState" type="Node" parent="StateMachine"]
 script = ExtResource("102_d6q6i")
 
+[node name="ReturnState" type="Node" parent="StateMachine"]
+script = ExtResource("103_k2nhi")
+
+[node name="PatrolState" type="Node" parent="StateMachine"]
+script = ExtResource("104_0iq21")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0016498, -0.0394009, 0.0142541)
 shape = SubResource("CapsuleShape3D_vahjm")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+debug_enabled = true

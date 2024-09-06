@@ -10,6 +10,12 @@ public abstract partial class CharacterBase : CharacterBody3D
     [Export, ExportGroup("Required Nodes")]
     public AnimatedSprite3D AnimatedSprite3DNode { get; protected set; }
 
+    [Export, ExportGroup("AI Nodes")]
+    public Path3D PathNode { get; private set; }
+
+    [Export, ExportGroup("AI Nodes")]
+    public NavigationAgent3D NavigationAgentNode { get; private set; }
+
     public Vector2 Direction { get; protected set; } = Vector2.Zero;
 
     public void FlipSprite()
