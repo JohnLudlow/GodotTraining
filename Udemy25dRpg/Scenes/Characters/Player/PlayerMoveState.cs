@@ -2,7 +2,7 @@ using Godot;
 
 namespace Udemy25dRpg.Scenes.Characters.Player;
 
-public partial class PlayerMoveState : PlayerStateBase
+public partial class PlayerMoveState : StateMachineStateBase
 {
     [Export(PropertyHint.Range, "0, 30, .1")]
     public float MoveFactor { get; private set; } = 5f;

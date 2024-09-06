@@ -2,7 +2,7 @@ using Godot;
 
 namespace Udemy25dRpg.Scenes.Characters.Player;
 
-public partial class Player : CharacterBody3D
+public partial class Player : CharacterBase
 {
     public enum PlayerInputs
     {
@@ -22,16 +22,6 @@ public partial class Player : CharacterBody3D
         Kick,
     }
 
-
-    [Export, ExportGroup("Required Nodes")]
-    public StateMachine StateMachineNode { get; private set; }
-
-    [Export, ExportGroup("Required Nodes")]
-    public AnimatedSprite3D AnimatedSprite3DNode { get; private set; }
-
-    public Vector2 Direction { get; private set; } = Vector2.Zero;
-
-
     public override void _Ready()
     {
         StateMachineNode.SwitchState<PlayerIdleState>();
@@ -46,17 +36,4 @@ public partial class Player : CharacterBody3D
             nameof(PlayerInputs.MoveBackward)
         );
     }
-
-    public void FlipSprite()
-    {
-        if (Direction.X < 0)
-        {
-            AnimatedSprite3DNode.FlipH = true;
-        }
-        else if (Direction.X > 0)
-        {
-            AnimatedSprite3DNode.FlipH = false;
-        }
-    }
-
 }

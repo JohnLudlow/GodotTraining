@@ -1,6 +1,6 @@
 [gd_scene load_steps=57 format=3 uid="uid://2als0j8j6wxe"]
 
-[ext_resource type="Script" path="res://Scenes/Characters/Player.cs" id="1_huxwr"]
+[ext_resource type="Script" path="res://Scenes/Characters/Player/Player.cs" id="1_huxwr"]
 [ext_resource type="Texture2D" uid="uid://y4hs6pyks4tw" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_000.png" id="2_2r0yv"]
 [ext_resource type="Texture2D" uid="uid://b7lhym3wvu5j6" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_001.png" id="3_5244l"]
 [ext_resource type="Texture2D" uid="uid://cfcjcof4e5sim" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_002.png" id="4_w2fvd"]
@@ -38,10 +38,10 @@
 [ext_resource type="Texture2D" uid="uid://c0e2lkwh8pug8" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_004.png" id="30_qlj7e"]
 [ext_resource type="Texture2D" uid="uid://iw1x6vq1koq3" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_005.png" id="31_d7bf5"]
 [ext_resource type="Texture2D" uid="uid://cfdxw0sp2nvjx" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_000.png" id="31_mg83m"]
-[ext_resource type="Script" path="res://Scenes/Characters/PlayerIdleState.cs" id="31_w18mu"]
+[ext_resource type="Script" path="res://Scenes/Characters/Player/PlayerIdleState.cs" id="31_w18mu"]
 [ext_resource type="Texture2D" uid="uid://ch2kjq2341kk5" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_006.png" id="32_dq8nx"]
 [ext_resource type="Texture2D" uid="uid://cgqfsw1vb5hxj" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_001.png" id="32_gvagx"]
-[ext_resource type="Script" path="res://Scenes/Characters/PlayerMoveState.cs" id="32_vc70e"]
+[ext_resource type="Script" path="res://Scenes/Characters/Player/PlayerMoveState.cs" id="32_vc70e"]
 [ext_resource type="Texture2D" uid="uid://ce21e5068dl3o" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_002.png" id="33_aoq6e"]
 [ext_resource type="Texture2D" uid="uid://buk3jem1k5h35" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_007.png" id="33_uuuus"]
 [ext_resource type="Texture2D" uid="uid://cuvd240px1abr" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_003.png" id="34_356xb"]
@@ -51,9 +51,9 @@
 [ext_resource type="Texture2D" uid="uid://d25iiuab77jhw" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_010.png" id="36_06eso"]
 [ext_resource type="Texture2D" uid="uid://bdv4ygt2vid7x" path="res://Assets/Sprites/Characters/Player/Sliding/Sliding_005.png" id="36_vn2yp"]
 [ext_resource type="Texture2D" uid="uid://dbgjebrr1akou" path="res://Assets/Sprites/Characters/Player/Kicking/Kicking_011.png" id="37_flpgl"]
-[ext_resource type="Script" path="res://Scenes/Characters/PlayerDashState.cs" id="41_7ie7a"]
+[ext_resource type="Script" path="res://Scenes/Characters/Player/PlayerDashState.cs" id="41_7ie7a"]
 [ext_resource type="PackedScene" uid="uid://chsjgdc42gn10" path="res://Scenes/Characters/StateMachine.tscn" id="50_wog05"]
-[ext_resource type="Script" path="res://Scenes/Characters/PlayerKickingState.cs" id="54_s5rbi"]
+[ext_resource type="Script" path="res://Scenes/Characters/Player/PlayerKickingState.cs" id="54_s5rbi"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4gqhn"]
 animations = [{
@@ -245,15 +245,12 @@ CurrentState = NodePath("IdleState")
 PossibleStates = [NodePath("IdleState"), NodePath("MoveState"), NodePath("DashState"), NodePath("KickingState")]
 
 [node name="IdleState" type="Node" parent="StateMachine"]
-unique_name_in_owner = true
 script = ExtResource("31_w18mu")
 
 [node name="MoveState" type="Node" parent="StateMachine"]
-unique_name_in_owner = true
 script = ExtResource("32_vc70e")
 
 [node name="DashState" type="Node" parent="StateMachine" node_paths=PackedStringArray("DashTimer")]
-unique_name_in_owner = true
 script = ExtResource("41_7ie7a")
 DashTimer = NodePath("Timer")
 
@@ -262,7 +259,6 @@ wait_time = 0.5
 one_shot = true
 
 [node name="KickingState" type="Node" parent="StateMachine"]
-unique_name_in_owner = true
 script = ExtResource("54_s5rbi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

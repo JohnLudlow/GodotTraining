@@ -2,7 +2,7 @@ using Godot;
 
 namespace Udemy25dRpg.Scenes.Characters.Player;
 
-public partial class PlayerIdleState : PlayerStateBase
+public partial class PlayerIdleState : StateMachineStateBase
 {
     public override void _Ready()
     {

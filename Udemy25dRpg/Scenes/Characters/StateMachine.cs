@@ -11,18 +11,18 @@ public partial class StateMachine : Node
     }
 
     [Export]
-    public PlayerStateBase CurrentState { get; private set; }
+    public StateMachineStateBase CurrentState { get; private set; }
 
     [Export]
-    public PlayerStateBase[] PossibleStates {get; private set;}
+    public StateMachineStateBase[] PossibleStates {get; private set;}
 
-    public void SwitchState<TState>() where TState : PlayerStateBase
+    public void SwitchState<TState>() where TState : StateMachineStateBase
     {
         var newState = PossibleStates.OfType<TState>().FirstOrDefault();
-
+        
         if (newState is null)
         {
-            GD.PushError("An invalid state was passed");
+            GD.PushError($"An invalid state {typeof(TState).Name} was passed");
             return;
         }
 

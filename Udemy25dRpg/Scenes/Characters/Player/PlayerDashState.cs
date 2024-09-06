@@ -2,7 +2,7 @@ using Godot;
 
 namespace Udemy25dRpg.Scenes.Characters.Player;
 
-public partial class PlayerDashState : PlayerStateBase
+public partial class PlayerDashState : StateMachineStateBase
 {
     [Export]
     public Timer DashTimer {get; private set;}

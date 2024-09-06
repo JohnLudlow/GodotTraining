@@ -3,7 +3,7 @@ using System;
 
 namespace Udemy25dRpg.Scenes.Characters.Enemy;
 
-public partial class Enemy : CharacterBody3D
+public partial class Enemy : CharacterBase
 {
     public enum EnemyAnimations
     {
@@ -12,5 +12,10 @@ public partial class Enemy : CharacterBody3D
         Attack,
         Death,
         TakeHit
+    }
+
+    public override void _Ready()
+    {
+        StateMachineNode.SwitchState<EnemyIdleState>();
     }
 }
