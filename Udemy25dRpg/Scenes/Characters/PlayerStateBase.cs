@@ -4,11 +4,11 @@ namespace Udemy25dRpg.Scenes.Characters;
 
 public abstract partial class PlayerStateBase : Node 
 {
-    protected Player _characterNode;
+    protected Player.Player _characterNode;
 
     public override void _Ready()
     {
-        _characterNode = GetOwner<Player>();
+        _characterNode = GetOwner<Player.Player>();
         SetPhysicsProcess(false);
         SetProcessInput(false);
     }

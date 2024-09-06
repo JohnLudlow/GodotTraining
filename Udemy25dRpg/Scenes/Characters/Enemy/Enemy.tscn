@@ -1,8 +1,8 @@
-[gd_scene load_steps=105 format=3 uid="uid://26cy6bbsdt37"]
+[gd_scene load_steps=103 format=3 uid="uid://26cy6bbsdt37"]
 
 [ext_resource type="Texture2D" uid="uid://ckonrd67f8enh" path="res://Assets/Sprites/Characters/Enemy Knight/Attack/0_Demons_of_Darkness_Slashing_000.png" id="1_gty22"]
 [ext_resource type="Texture2D" uid="uid://cjdjjbuattvtu" path="res://Assets/Sprites/Characters/Enemy Knight/Idle/0_Demons_of_Darkness_Idle_000.png" id="1_le6bp"]
-[ext_resource type="Script" path="res://Scenes/Characters/Enemy/Enemy.cs" id="1_p0gp1"]
+[ext_resource type="Script" path="res://Scenes/Characters/Enemy.cs" id="1_tph2b"]
 [ext_resource type="Texture2D" uid="uid://b6a43k3p3mr14" path="res://Assets/Sprites/Characters/Enemy Knight/Idle/0_Demons_of_Darkness_Idle_001.png" id="2_1v34l"]
 [ext_resource type="Texture2D" uid="uid://d264uonsup8d1" path="res://Assets/Sprites/Characters/Enemy Knight/Attack/0_Demons_of_Darkness_Slashing_001.png" id="2_rlvkw"]
 [ext_resource type="Texture2D" uid="uid://dl6cypbwp1oss" path="res://Assets/Sprites/Characters/Enemy Knight/Idle/0_Demons_of_Darkness_Idle_002.png" id="3_2ngr4"]
@@ -100,8 +100,6 @@
 [ext_resource type="Texture2D" uid="uid://i8cbfoeexo0o" path="res://Assets/Sprites/Characters/Enemy Knight/TakeHit/0_Demons_of_Darkness_Hurt_009.png" id="97_ewh1w"]
 [ext_resource type="Texture2D" uid="uid://docs320wpoxoc" path="res://Assets/Sprites/Characters/Enemy Knight/TakeHit/0_Demons_of_Darkness_Hurt_010.png" id="98_ok0ba"]
 [ext_resource type="Texture2D" uid="uid://b4pv0ny4xgeme" path="res://Assets/Sprites/Characters/Enemy Knight/TakeHit/0_Demons_of_Darkness_Hurt_011.png" id="99_5kr26"]
-[ext_resource type="PackedScene" uid="uid://chsjgdc42gn10" path="res://Scenes/Characters/StateMachine.tscn" id="101_x0083"]
-[ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyIdleState.cs" id="102_6c8r3"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nl2d3"]
 animations = [{
@@ -437,7 +435,7 @@ collision_layer = 4
 collision_mask = 7
 floor_max_angle = 1.55334
 floor_snap_length = 100.0
-script = ExtResource("1_p0gp1")
+script = ExtResource("1_tph2b")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 sprite_frames = SubResource("SpriteFrames_nl2d3")
@@ -448,9 +446,3 @@ frame_progress = 1.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0016498, -0.0394009, 0.0142541)
 shape = SubResource("CapsuleShape3D_vahjm")
-
-[node name="StateMachine" parent="." node_paths=PackedStringArray("PossibleStates") instance=ExtResource("101_x0083")]
-PossibleStates = []
-
-[node name="IdleState" type="Node" parent="StateMachine"]
-script = ExtResource("102_6c8r3")

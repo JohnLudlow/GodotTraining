@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://Scenes/Characters/StateMachine.cs" id="1_l8hxj"]
 
-[node name="StateMachine" type="Node" node_paths=PackedStringArray("CurrentState", "PossibleStates")]
+[node name="StateMachine" type="Node" node_paths=PackedStringArray("PossibleStates")]
 script = ExtResource("1_l8hxj")
-CurrentState = NodePath("")
-PossibleStates = [null, null, null, null]
+PossibleStates = []

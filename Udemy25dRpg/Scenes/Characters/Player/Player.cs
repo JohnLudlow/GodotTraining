@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Udemy25dRpg.Scenes.Characters;
+namespace Udemy25dRpg.Scenes.Characters.Player;
 
 public partial class Player : CharacterBody3D
 {
