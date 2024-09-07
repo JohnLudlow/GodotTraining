@@ -26,7 +26,11 @@ public partial class StateMachine : Node
             return;
         }
 
-        CurrentState.Notification((int)StateMachineMessages.DisableState);
+        if (CurrentState is not TState)
+        {
+            CurrentState.Notification((int)StateMachineMessages.DisableState);
+        }
+
         CurrentState = newState;
         CurrentState.Notification((int)StateMachineMessages.EnableState);
     }

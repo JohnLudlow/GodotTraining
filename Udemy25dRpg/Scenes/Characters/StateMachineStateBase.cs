@@ -28,10 +28,12 @@ public abstract partial class StateMachineStateBase : Node
         }
         else if (what == (int)StateMachine.StateMachineMessages.DisableState)
         {
+            ExitState();
             SetPhysicsProcess(false);
             SetProcessInput(false);
         }
     }
 
-    protected abstract void EnterState();
+    protected virtual void ExitState() { }
+    protected virtual void EnterState() { }
 }

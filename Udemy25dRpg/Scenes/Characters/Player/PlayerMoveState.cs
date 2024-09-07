@@ -26,10 +26,7 @@ public partial class PlayerMoveState : StateMachineStateBase
         _characterNode.FlipSprite();
     }
 
-    protected override void EnterState()
-    {
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Move));
-    }
+    protected override void EnterState() => _characterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Move));
 
     public override void _Input(InputEvent @event)
     {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=107 format=3 uid="uid://26cy6bbsdt37"]
+[gd_scene load_steps=111 format=3 uid="uid://26cy6bbsdt37"]
 
 [ext_resource type="Texture2D" uid="uid://ckonrd67f8enh" path="res://Assets/Sprites/Characters/Enemy Knight/Attack/0_Demons_of_Darkness_Slashing_000.png" id="1_gty22"]
 [ext_resource type="Texture2D" uid="uid://cjdjjbuattvtu" path="res://Assets/Sprites/Characters/Enemy Knight/Idle/0_Demons_of_Darkness_Idle_000.png" id="1_le6bp"]
@@ -104,6 +104,8 @@
 [ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyIdleState.cs" id="102_d6q6i"]
 [ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyReturnState.cs" id="103_k2nhi"]
 [ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyPatrolState.cs" id="104_0iq21"]
+[ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyChaseState.cs" id="105_pnbh4"]
+[ext_resource type="Script" path="res://Scenes/Characters/Enemy/EnemyAttackState.cs" id="106_epu7y"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nl2d3"]
 animations = [{
@@ -434,7 +436,13 @@ animations = [{
 radius = 0.549619
 height = 1.29953
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode", "NavigationAgentNode")]
+[sub_resource type="SphereShape3D" id="SphereShape3D_jdduw"]
+radius = 6.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_e33me"]
+radius = 1.4
+
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode", "NavigationAgentNode", "ChaseAreaNode", "AttackAreaNode")]
 collision_layer = 4
 collision_mask = 7
 floor_max_angle = 1.55334
@@ -443,15 +451,23 @@ script = ExtResource("1_tph2b")
 StateMachineNode = NodePath("StateMachine")
 AnimatedSprite3DNode = NodePath("AnimatedSprite3D")
 NavigationAgentNode = NodePath("NavigationAgent3D")
+ChaseAreaNode = NodePath("ChaseArea")
+AttackAreaNode = NodePath("AttackArea")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 pixel_size = 0.0025
 sprite_frames = SubResource("SpriteFrames_nl2d3")
-animation = &"Move"
+animation = &"Attack"
+frame = 11
+frame_progress = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0016498, -0.0394009, 0.0142541)
+shape = SubResource("CapsuleShape3D_vahjm")
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("CurrentState", "PossibleStates") instance=ExtResource("101_svyoj")]
 CurrentState = NodePath("IdleState")
-PossibleStates = [NodePath("IdleState"), NodePath("ReturnState"), NodePath("PatrolState")]
+PossibleStates = [NodePath("IdleState"), NodePath("ReturnState"), NodePath("PatrolState"), NodePath("ChaseState"), NodePath("AttackState")]
 
 [node name="IdleState" type="Node" parent="StateMachine"]
 script = ExtResource("102_d6q6i")
@@ -459,12 +475,38 @@ script = ExtResource("102_d6q6i")
 [node name="ReturnState" type="Node" parent="StateMachine"]
 script = ExtResource("103_k2nhi")
 
-[node name="PatrolState" type="Node" parent="StateMachine"]
+[node name="PatrolState" type="Node" parent="StateMachine" node_paths=PackedStringArray("IdleTimerNode")]
 script = ExtResource("104_0iq21")
+IdleTimerNode = NodePath("Timer")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0016498, -0.0394009, 0.0142541)
-shape = SubResource("CapsuleShape3D_vahjm")
+[node name="Timer" type="Timer" parent="StateMachine/PatrolState"]
+one_shot = true
+
+[node name="ChaseState" type="Node" parent="StateMachine" node_paths=PackedStringArray("TimerNode")]
+script = ExtResource("105_pnbh4")
+TimerNode = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="StateMachine/ChaseState"]
+wait_time = 0.5
+
+[node name="AttackState" type="Node" parent="StateMachine"]
+script = ExtResource("106_epu7y")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 debug_enabled = true
+
+[node name="ChaseArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChaseArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00191832, 0, 0)
+shape = SubResource("SphereShape3D_jdduw")
+
+[node name="AttackArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00685871, 0, 0)
+shape = SubResource("SphereShape3D_e33me")
