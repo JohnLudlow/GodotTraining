@@ -12,7 +12,7 @@ public partial class EnemyIdleState : EnemyState
     protected override void EnterState()
     {
         _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Idle));
-        _characterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;        
+        _characterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;
     }
 
 

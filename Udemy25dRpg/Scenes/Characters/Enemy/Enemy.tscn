@@ -477,7 +477,7 @@ script = ExtResource("103_k2nhi")
 
 [node name="PatrolState" type="Node" parent="StateMachine" node_paths=PackedStringArray("IdleTimerNode")]
 script = ExtResource("104_0iq21")
-IdleTimerNode = NodePath("Timer")
+IdleTimerNode = NodePath("../ChaseState/Timer")
 
 [node name="Timer" type="Timer" parent="StateMachine/PatrolState"]
 one_shot = true

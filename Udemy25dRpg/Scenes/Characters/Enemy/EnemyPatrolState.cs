@@ -24,20 +24,21 @@ public partial class EnemyPatrolState : EnemyState
     protected override void EnterState()
     {
         _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
-
-        _pathNodeIndex = 1;
-        _destination = GetPointGlobalPosition(_pathNodeIndex);                
-        _characterNode.NavigationAgentNode.TargetPosition = _destination;
-
         _characterNode.NavigationAgentNode.NavigationFinished += HandleNavigationFinished;
         _characterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;
 
+        _pathNodeIndex = 1;
+        _destination = GetPointGlobalPosition(_pathNodeIndex);                
+
+        _characterNode.NavigationAgentNode.TargetPosition = _destination;
+
         IdleTimerNode.Timeout += HandleTimerTimeout;
-        IdleTimerNode.Start();
     }
 
     private void HandleTimerTimeout()
     {
+        IdleTimerNode.Stop();
+
         _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
 
         _pathNodeIndex = Mathf.Wrap(_pathNodeIndex + 1, 0, _characterNode.PathNode.Curve.PointCount);
