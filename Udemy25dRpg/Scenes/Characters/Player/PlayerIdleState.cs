@@ -2,7 +2,7 @@ using Godot;
 
 namespace Udemy25dRpg.Scenes.Characters.Player;
 
-public partial class PlayerIdleState : StateMachineStateBase
+public partial class PlayerIdleState : PlayerState
 {
     public override void _Ready()
     {
@@ -28,13 +28,6 @@ public partial class PlayerIdleState : StateMachineStateBase
 
     public override void _Input(InputEvent @event)
     {
-        if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Dash)))
-        {
-            _characterNode.StateMachineNode.SwitchState<PlayerDashState>();
-        }
-        else if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Kick)))
-        {
-            _characterNode.StateMachineNode.SwitchState<PlayerKickingState>();
-        }
+        HandleInput();
     }
 }

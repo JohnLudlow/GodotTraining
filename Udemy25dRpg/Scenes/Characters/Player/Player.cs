@@ -11,7 +11,7 @@ public partial class Player : CharacterBase
         MoveForward,
         MoveBackward,
         Dash,
-        Kick,
+        Attack,
     }
 
     public enum PlayerAnimations
@@ -20,10 +20,12 @@ public partial class Player : CharacterBase
         Move,
         Dash,
         Kick,
+        Slash,
     }
 
     public override void _Ready()
     {
+        base._Ready();
         StateMachineNode.SwitchState<PlayerIdleState>();
     }
 
