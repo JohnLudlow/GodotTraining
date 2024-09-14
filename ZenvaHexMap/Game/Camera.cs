@@ -1,6 +1,4 @@
 using Godot;
-using System.Data;
-using System.Diagnostics;
 
 namespace HexTileMap;
 public partial class Camera : Camera2D
