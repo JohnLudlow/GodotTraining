@@ -442,7 +442,7 @@ radius = 6.0
 [sub_resource type="SphereShape3D" id="SphereShape3D_e33me"]
 radius = 1.4
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode", "NavigationAgentNode", "ChaseAreaNode", "AttackAreaNode")]
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode", "NavigationAgentNode", "ChaseAreaNode", "AttackAreaNode", "HurtboxAreaNode")]
 collision_layer = 4
 collision_mask = 7
 floor_max_angle = 1.55334
@@ -453,6 +453,7 @@ AnimatedSprite3DNode = NodePath("AnimatedSprite3D")
 NavigationAgentNode = NodePath("NavigationAgent3D")
 ChaseAreaNode = NodePath("ChaseArea")
 AttackAreaNode = NodePath("AttackArea")
+HurtboxAreaNode = NodePath("Hurtbox")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 pixel_size = 0.0025
@@ -477,7 +478,7 @@ script = ExtResource("103_k2nhi")
 
 [node name="PatrolState" type="Node" parent="StateMachine" node_paths=PackedStringArray("IdleTimerNode")]
 script = ExtResource("104_0iq21")
-IdleTimerNode = NodePath("Timer")
+IdleTimerNode = NodePath("../ChaseState/Timer")
 
 [node name="Timer" type="Timer" parent="StateMachine/PatrolState"]
 one_shot = true
@@ -510,3 +511,12 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00685871, 0, 0)
 shape = SubResource("SphereShape3D_e33me")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0442426, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00340137, 0, 0.0122335)
+shape = SubResource("CapsuleShape3D_vahjm")

@@ -15,7 +15,7 @@ agent_max_climb = 0.5
 
 [sub_resource type="Curve3D" id="Curve3D_dwwjv"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 12.1557, 0, 0.674342, 0, 0, 0, 0, 0, 0, 14.262, 0, 6.03575, 0, 0, 0, 0, 0, 0, 6.85815, 0, 6.1634, 0, 0, 0, 0, 0, 0, 0.68073, 0, 5.44764, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12.1557, 0, 0.674342),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 12.1557, 0.272755, 0.674342, 0, 0, 0, 0, 0, 0, 14.262, 0.3423, 6.03575, 0, 0, 0, 0, 0, 0, 6.85815, 0.261127, 6.1634, 0, 0, 0, 0, 0, 0, 0.68073, 0, 5.44764, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12.1557, 0, 0.674342),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
 }
 point_count = 6
@@ -127,7 +127,7 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0218525, 3.42609, 0.0280008)
 
 [node name="Path3D" type="Path3D" parent="Enemies"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.51741, -2.14211, 4.39449)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.51741, -1.88197, 4.39449)
 curve = SubResource("Curve3D_dwwjv")
 
 [node name="Enemy" parent="Enemies/Path3D" node_paths=PackedStringArray("PathNode") instance=ExtResource("4_icwfl")]

@@ -2,7 +2,7 @@ using Godot;
 
 namespace Udemy25dRpg.Scenes.Characters.Player;
 
-public partial class PlayerMoveState : StateMachineStateBase
+public partial class PlayerMoveState : PlayerState
 {
     [Export(PropertyHint.Range, "0, 30, .1")]
     public float MoveFactor { get; private set; } = 5f;
@@ -30,13 +30,6 @@ public partial class PlayerMoveState : StateMachineStateBase
 
     public override void _Input(InputEvent @event)
     {
-        if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Dash)))
-        {
-            _characterNode.StateMachineNode.SwitchState<PlayerDashState>();
-        }
-        else if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Kick)))
-        {
-            _characterNode.StateMachineNode.SwitchState<PlayerKickingState>();
-        }
+        HandleInput();
     }
 }
