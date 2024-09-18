@@ -1,8 +1,5 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace HexTileMap;
 
@@ -20,7 +17,9 @@ public partial class City : Node2D
         set
         {
             _ownerCivilization = value;
-            _sprite.Modulate = OwnerCivilization.CivilizationTerritoryColor;
+
+            _sprite ??= GetNode<Sprite2D>("Sprite2D");
+            _sprite.Modulate = _ownerCivilization.CivilizationTerritoryColor;
         }
     }
 
@@ -30,6 +29,7 @@ public partial class City : Node2D
         set
         {
             _cityName = value;
+            _label ??= GetNode<Label>("Label");
             _label.Text = _cityName;            
         }
     }
@@ -38,12 +38,6 @@ public partial class City : Node2D
     private Label _label;
     private Civilization _ownerCivilization;
     private string _cityName;
-
-    public override void _Ready()
-    {
-        _label = GetNode<Label>("Label");
-        _sprite = GetNode<Sprite2D>("Sprite2D");
-    }
 
     public void AddTerritory(IEnumerable<Hex> territoryToAdd)
     {

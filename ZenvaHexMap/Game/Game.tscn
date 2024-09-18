@@ -83,7 +83,7 @@ tile_set = SubResource("TileSet_bxxom")
 metadata/_edit_lock_ = true
 
 [node name="CivColorsLayer" type="TileMapLayer" parent="HexTileMap"]
-modulate = Color(1, 1, 1, 0.235294)
+modulate = Color(1, 1, 1, 0.392157)
 tile_set = SubResource("TileSet_hd3s7")
 
 [node name="HexBordersLayer" type="TileMapLayer" parent="HexTileMap"]

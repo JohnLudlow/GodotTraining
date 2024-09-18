@@ -32,6 +32,8 @@ public partial class HexTileMap : Node2D
     [Signal]
     public delegate void ClickOffMapEventHandler();
 
+    private TileSetAtlasSource _tileSetAtlasSource;
+
     private PackedScene _cityScene = ResourceLoader.Load<PackedScene>("Game/City.tscn");
 
     private Dictionary<Vector2I, Hex> _mapData;
@@ -74,15 +76,17 @@ public partial class HexTileMap : Node2D
 
         };
 
-        _baseLayer = GetNode<TileMapLayer>("BaseLayer");
-        _borderLayer = GetNode<TileMapLayer>("HexBordersLayer");
-        _overlayLayer = GetNode<TileMapLayer>("SelectionOverlayLayer");
-        _civColorLayer = GetNode<TileMapLayer>("CivColorsLayer");
+        _baseLayer          = GetNode<TileMapLayer>("BaseLayer");
+        _borderLayer        = GetNode<TileMapLayer>("HexBordersLayer");
+        _overlayLayer       = GetNode<TileMapLayer>("SelectionOverlayLayer");
+        _civColorLayer      = GetNode<TileMapLayer>("CivColorsLayer");
+        _tileSetAtlasSource = (TileSetAtlasSource)_civColorLayer.TileSet.GetSource(0);
 
         GenerateTerrain();
         GenerateResources();
 
-        var starts = GenerateStartingLocations(NumberOfAIPlayers);
+        var starts = GenerateStartingLocations(NumberOfAIPlayers);        
+        GenerateAIPlayers(starts);
 
         SendHexData += _uiManager.UpdateTerrainInfoUI;
     }
@@ -130,7 +134,14 @@ public partial class HexTileMap : Node2D
                 AltTileId = 0,
             };
 
+            var id = _tileSetAtlasSource.CreateAlternativeTile(_terrainTextures[TerrainTypes.CivColorBase]);
+            GD.Print($"Created alternate tile for civ {civ.CivilizationName} {civ.CivilizationTerritoryColor} ({id}, {_tileSetAtlasSource.GetAlternativeTilesCount(_terrainTextures[TerrainTypes.CivColorBase])})");
+            _tileSetAtlasSource.GetTileData(_terrainTextures[TerrainTypes.CivColorBase], id).Modulate = civ.CivilizationTerritoryColor;
+
+            civ.AltTileId = id;
+
             CreateCity(civ, startingLocations[i], $"{civ.CivilizationName} City at {startingLocations[i]}");
+            _civs.Add(civ);
         }
     }
 
@@ -173,7 +184,7 @@ public partial class HexTileMap : Node2D
         for(var i = 0; i < count; i++)        
         {
             var coord = new Vector2I();
-            bool valid = true;
+            bool valid = false;
             int counter = 0;
 
             while(!valid && counter < 10000)
@@ -211,8 +222,7 @@ public partial class HexTileMap : Node2D
             return false;
         }
 
-        if (locations.Any(l => Math.Abs(coordinates.X - l.X) < 20 || Math.Abs(coordinates.Y - l.Y) < 20)
-        )
+        if (locations.Any(l => Math.Abs(coordinates.X - l.X) < 20 && Math.Abs(coordinates.Y - l.Y) < 20))
         {
             return false;
         }
@@ -222,11 +232,12 @@ public partial class HexTileMap : Node2D
 
     public void UpdateCivTerritoryMap(Civilization civilization)
     {
-        foreach (City city in civilization.Cities)
+        foreach (var city in civilization.Cities)
         {
-            foreach (Hex hex in city.CityTerritory)
+            foreach (var hex in city.CityTerritory)
             {
-                _civColorLayer.SetCell(hex.Coordinates, 0, _terrainTextures[hex.TerrainType], civilization.AltTileId);
+                GD.Print($"Updating cell tile for civ {civilization.CivilizationName} {civilization.CivilizationTerritoryColor} ({civilization.AltTileId}) ({hex.Coordinates})");
+                _civColorLayer.SetCell(hex.Coordinates, 0, _terrainTextures[TerrainTypes.CivColorBase], civilization.AltTileId);
             }
         }
     }
