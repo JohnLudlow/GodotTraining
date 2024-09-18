@@ -14,6 +14,7 @@ config/name="Udemy25dRpg"
 run/main_scene="res://Scenes/Levels/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://Assets/castle.svg"
+config/tags=PackedStringArray("c#", "udemy")
 
 [display]
 

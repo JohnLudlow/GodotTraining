@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Godot;
 
@@ -13,23 +14,9 @@ public enum TerrainTypes {
     Forest,
     Beach,
     ShallowWater,
-    Ice,    
+    Ice,
+    CivColorBase,
 }
-
-
-public class Hex(TerrainTypes _terrainType, Vector2I _coordinates, int _food = 0, int _production = 0)
-{
-    public TerrainTypes TerrainType { get; } = _terrainType;
-    public Vector2I Coordinates { get; } = _coordinates;
-    public int Food { get; set; } = _food;
-    public int Production { get; set; } = _production;
-
-    public override string ToString()
-    {
-        return $"{TerrainType} at {Coordinates} => Food {Food}, Production {Production}";
-    }
-}
-
 
 public partial class HexTileMap : Node2D
 {
@@ -39,15 +26,27 @@ public partial class HexTileMap : Node2D
     [Export]
     public int Height { get; set; } = 60;
 
+    [Export]
+    public int NumberOfAIPlayers { get; set; } = 8;
+
+    [Signal]
+    public delegate void ClickOffMapEventHandler();
+
+    private PackedScene _cityScene = ResourceLoader.Load<PackedScene>("Game/City.tscn");
+
     private Dictionary<Vector2I, Hex> _mapData;
 
     private Dictionary<TerrainTypes, Vector2I> _terrainTextures;
 
-    private TileMapLayer _baseLayer, _borderLayer, _overlayLayer;
+    private TileMapLayer _baseLayer, _borderLayer, _overlayLayer, _civColorLayer;
 
     private Vector2I _selectedCell = new(-1, -1);
 
     private UIManager _uiManager;
+
+    private readonly Dictionary<Vector2I, City> _cities = [];
+    private readonly List<Civilization> _civs = [];
+
 
     public delegate void SendHexDataEventHandler(Hex hex);
 
@@ -70,14 +69,20 @@ public partial class HexTileMap : Node2D
 
             [TerrainTypes.Ice]           = new Vector2I(0, 3),
             [TerrainTypes.Forest]        = new Vector2I(1, 3),
+
+            [TerrainTypes.CivColorBase]  = new Vector2I(0, 3),
+
         };
 
         _baseLayer = GetNode<TileMapLayer>("BaseLayer");
         _borderLayer = GetNode<TileMapLayer>("HexBordersLayer");
         _overlayLayer = GetNode<TileMapLayer>("SelectionOverlayLayer");
+        _civColorLayer = GetNode<TileMapLayer>("CivColorsLayer");
 
         GenerateTerrain();
         GenerateResources();
+
+        var starts = GenerateStartingLocations(NumberOfAIPlayers);
 
         SendHexData += _uiManager.UpdateTerrainInfoUI;
     }
@@ -89,7 +94,7 @@ public partial class HexTileMap : Node2D
             var mapCoords = _baseLayer.LocalToMap(GetLocalMousePosition());
 
             if (_mapData.TryGetValue(mapCoords, out var hex))
-            {                
+            {
                 if (mouseButton.ButtonMask == MouseButtonMask.Left)
                 {
                     GD.Print(hex);
@@ -106,10 +111,151 @@ public partial class HexTileMap : Node2D
                 }
             }
             else
-            {
+            {                
                 _overlayLayer.SetCell(_selectedCell, -1);
+                EmitSignal(SignalName.ClickOffMap);
             }
         }
+    }
+
+    private void GenerateAIPlayers(List<Vector2I> startingLocations)
+    {
+        for (var i = 0; i < startingLocations.Count; i++)
+        {
+            var civ = new Civilization
+            {
+                CivilizationID = i + 1,
+                CivilizationName = $"Civ {i + 1}",
+                IsPlayerCivilization = false,
+                AltTileId = 0,
+            };
+
+            CreateCity(civ, startingLocations[i], $"{civ.CivilizationName} City at {startingLocations[i]}");
+        }
+    }
+
+    public void CreateCity(Civilization civilization, Vector2I coordinates, string cityName)
+    {
+        var city = _cityScene.Instantiate<City>();
+        city.Map = this;
+        city.OwnerCivilization = civilization;
+        city.Name = cityName;
+
+        _mapData[coordinates].IsCityCenter = true;
+
+        city.CityCentreCoordinates = coordinates;
+        city.Position = _baseLayer.MapToLocal(coordinates);
+
+        city.AddTerritory([_mapData[coordinates]]);
+        city.AddTerritory(
+            GetAdjacentCells(coordinates)
+                .Select(c => _mapData[c])
+                .Where(hex => hex.OwnerCity is null)
+            );
+
+        civilization.Cities.Add(city);
+
+        AddChild(city);
+
+        _cities[coordinates] = city;
+
+        UpdateCivTerritoryMap(civilization);
+    }
+
+    private List<Vector2I> GenerateStartingLocations(int count)
+    {
+        var locations = new List<Vector2I>();
+        var plainsLocations = _mapData.Values
+            .Where(h => h.TerrainType == TerrainTypes.Plains)
+            .Select(h => h.Coordinates).ToList();
+
+        var rand = new Random();
+        for(var i = 0; i < count; i++)        
+        {
+            var coord = new Vector2I();
+            bool valid = true;
+            int counter = 0;
+
+            while(!valid && counter < 10000)
+            {
+                coord = plainsLocations.ElementAt(rand.Next(plainsLocations.Count()));
+                valid = IsValidStartingLocation(coord, locations);
+                counter++;
+            }
+
+            if (valid)
+            {
+                plainsLocations.Remove(coord);
+
+                foreach(var cell in GetAdjacentCells(coord, 3))
+                {
+                    plainsLocations.Remove(cell);
+                }
+
+                locations.Add(coord);
+            }
+        }
+
+        return locations;
+    }
+
+    private bool IsValidStartingLocation(Vector2I coordinates, IEnumerable<Vector2I> locations)
+    {   
+        if (
+            !_mapData.ContainsKey(coordinates) ||
+            
+            coordinates.X < 3 || coordinates.X > Width - 3 ||
+            coordinates.Y < 3 || coordinates.Y > Height - 3
+        )
+        {
+            return false;
+        }
+
+        if (locations.Any(l => Math.Abs(coordinates.X - l.X) < 20 || Math.Abs(coordinates.Y - l.Y) < 20)
+        )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void UpdateCivTerritoryMap(Civilization civilization)
+    {
+        foreach (City city in civilization.Cities)
+        {
+            foreach (Hex hex in city.CityTerritory)
+            {
+                _civColorLayer.SetCell(hex.Coordinates, 0, _terrainTextures[hex.TerrainType], civilization.AltTileId);
+            }
+        }
+    }
+
+    private List<Vector2I> GetAdjacentCells(Vector2I coordinates, int distance = 1)
+    {
+        return GetAdjacentCells(coordinates, distance, []);
+    }
+    private List<Vector2I> GetAdjacentCells(Vector2I coordinates, int distance, List<Vector2I> cells)
+    {
+        foreach (var adj in _baseLayer.GetSurroundingCells(coordinates))
+        {
+            if (distance > 1 && !cells.Contains(adj))
+            {
+                cells.AddRange(GetAdjacentCells(adj, distance - 1, cells));
+            }
+
+            if (_mapData.ContainsKey(adj))
+            {
+                cells.Add(adj);
+            }
+        }
+
+        return cells.Distinct().ToList();
+    }
+
+    public bool HexInBounds(Vector2I coordinates)
+    {
+        return _mapData.ContainsKey(coordinates);
     }
 
     public void GenerateResources()
@@ -210,11 +356,17 @@ public partial class HexTileMap : Node2D
         {
             for (var y = 0; y < random.Next(1, maxIce) + 1; y++)
             {
+                var hex = new Hex(TerrainTypes.Ice, new Vector2I(x, y));
+                _mapData[hex.Coordinates] = hex;
+
                 _baseLayer.SetCell(new Vector2I(x, y), 0, _terrainTextures[TerrainTypes.Ice]);
             }
 
             for (var y = Height - 1; y > Height - random.Next(1, maxIce) - 1; y--)
             {
+                var hex = new Hex(TerrainTypes.Ice, new Vector2I(x, y));
+                _mapData[hex.Coordinates] = hex;
+
                 _baseLayer.SetCell(new Vector2I(x, y), 0, _terrainTextures[TerrainTypes.Ice]);
             }
         }
@@ -293,10 +445,7 @@ public partial class HexTileMap : Node2D
         return (noiseMax, noiseMap);
     }
 
-    public Vector2 MapToLocal(Vector2I coords)
-    {
-        return _baseLayer.MapToLocal(coords);
-    }
+    public Vector2 MapToLocal(Vector2I coords) => _baseLayer.MapToLocal(coords);
 
 }
 
