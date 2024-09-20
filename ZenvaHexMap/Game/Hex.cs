@@ -1,7 +1,6 @@
 using Godot;
 
-namespace HexTileMap;
-
+namespace ZenvaHexMap.Game;
 public class Hex
 {
     public TerrainTypes TerrainType { get; }

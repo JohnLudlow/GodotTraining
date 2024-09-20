@@ -1,14 +1,19 @@
 using Godot;
 
-namespace HexTileMap;
+namespace ZenvaHexMap.Game;
 
 public partial class UIManager : Node2D
 {
   private TerrainTileUI _terrainTileUI;
   private CityUI _cityUI;
+  private GeneralUI _generalUI;
+
+  [Signal]
+  public delegate void EndTurnEventHandler();
 
   private PackedScene TerrainUIScene { get; } = ResourceLoader.Load<PackedScene>("Game/TerrainTileUI.tscn");
   private PackedScene CityUIScene { get; } = ResourceLoader.Load<PackedScene>("Game/CityUI.tscn");
+
 
   private CityUI CityUI
   {
@@ -33,6 +38,22 @@ public partial class UIManager : Node2D
 
       _terrainTileUI = value;
     }
+  }
+
+  public override void _Ready()
+  {
+    base._Ready();
+
+    _generalUI = GetNode<GeneralUI>("GeneralUI");
+
+    var button = _generalUI.GetNode<Button>("EndTurnButton");
+    button.Pressed += SignalEndTurn;
+  }
+
+  public void SignalEndTurn()
+  {
+    EmitSignal(SignalName.EndTurn);
+    _generalUI.EndTurn();
   }
 
   public void HideAllPopups()

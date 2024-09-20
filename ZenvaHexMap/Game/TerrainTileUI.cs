@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Godot;
 
-namespace HexTileMap;
+namespace ZenvaHexMap.Game;
 
 public partial class TerrainTileUI : Panel
 {

@@ -1,8 +1,6 @@
 using Godot;
-using System;
-using System.Globalization;
 
-namespace HexTileMap;
+namespace ZenvaHexMap.Game;
 
 public partial class CityUI : Panel
 {

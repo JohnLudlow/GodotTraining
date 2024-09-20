@@ -4,7 +4,7 @@ using System.Linq;
 
 using Godot;
 
-namespace HexTileMap;
+namespace ZenvaHexMap.Game;
 
 public enum TerrainTypes
 {
@@ -103,6 +103,7 @@ public partial class HexTileMap : Node2D
     GenerateAIPlayerCivs(starts);
 
     SendHexData += _uiManager.UpdateTerrainInfoUI;
+    _uiManager.EndTurn += ProcessTurn;
   }
 
   public override void _UnhandledInput(InputEvent @event)
@@ -125,7 +126,7 @@ public partial class HexTileMap : Node2D
           {
             SendHexData?.Invoke(hex);
           }
-          
+
           if (mapCoords != _selectedCell)
           {
             _overlayLayer.SetCell(_selectedCell, -1);
@@ -141,6 +142,11 @@ public partial class HexTileMap : Node2D
         EmitSignal(SignalName.ClickOffMap);
       }
     }
+  }
+
+  public void ProcessTurn()
+  {
+    GD.Print($"{_uiManager}");
   }
 
   public Civilization GeneratePlayerCiv(Vector2I start)
