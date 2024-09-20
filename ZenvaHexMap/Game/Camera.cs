@@ -22,6 +22,8 @@ public partial class Camera : Camera2D
         _rightBound   = ToGlobal(_map.MapToLocal(new Vector2I(_map.Width ,           0))).X - 100;
         _topBound     = ToGlobal(_map.MapToLocal(new Vector2I(0          ,           0))).Y + 50;
         _bottomBound  = ToGlobal(_map.MapToLocal(new Vector2I(0          , _map.Height))).Y - 50;
+
+        Position = GetScreenCenterPosition();
     }
 
     public override void _PhysicsProcess(double delta)

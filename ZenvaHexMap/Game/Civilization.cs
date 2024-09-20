@@ -15,7 +15,8 @@ public partial class Civilization
 
     public required int CivilizationID { get; init; }
     public required string CivilizationName { get; init; }
-    public bool IsPlayerCivilization { get; init; } = false;
+    public bool IsPlayerCivilization { get; init; }
+    
     public Color CivilizationTerritoryColor { get; init; }
     public required int AltTileId { get; set; }
     public List<City> Cities { get; set; } = [];    

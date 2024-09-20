@@ -2,15 +2,24 @@ using Godot;
 
 namespace HexTileMap;
 
-public class Hex(TerrainTypes _terrainType, Vector2I _coordinates, int _food = 0, int _production = 0)
+public class Hex
 {
-    public TerrainTypes TerrainType { get; } = _terrainType;
-    public Vector2I Coordinates { get; } = _coordinates;
-    public int Food { get; set; } = _food;
-    public int Production { get; set; } = _production;
+    public TerrainTypes TerrainType { get; }
+    public Vector2I Coordinates { get; }
+    public int Food { get; set; }
+    public int Production { get; set; }
 
-    public City OwnerCity { get; set; } = null;
-    public bool IsCityCenter { get; set; } = false;
+    public City OwnerCity { get; set; }
+
+    public bool IsCityCenter { get; set; }
+
+    public Hex(TerrainTypes terrainType, Vector2I coordinates, int food = 0, int production = 0)
+    {
+        TerrainType = terrainType;
+        Coordinates = coordinates;
+        Food = food;
+        Production = production;
+    }
 
     public override string ToString()
     {

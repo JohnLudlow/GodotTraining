@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HexTileMap;
 
@@ -10,6 +11,10 @@ public partial class City : Node2D
 
     public List<Hex> CityTerritory { get; } = [];
     public List<Hex> BorderTilePool { get; } = [];
+
+    public int Population { get;set; } = 1;
+    public int TotalFood => CityTerritory.Sum(t => t.Food);
+    public int TotalProduction => CityTerritory.Sum(t => t.Production);
 
     public Civilization OwnerCivilization
     {

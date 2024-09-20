@@ -4,39 +4,57 @@ namespace HexTileMap;
 
 public partial class UIManager : Node2D
 {
-    private TerrainTileUI _terrainTileUI;
+  private TerrainTileUI _terrainTileUI;
+  private CityUI _cityUI;
 
-    private PackedScene TerrainUIScene {get;set;}
+  private PackedScene TerrainUIScene { get; } = ResourceLoader.Load<PackedScene>("Game/TerrainTileUI.tscn");
+  private PackedScene CityUIScene { get; } = ResourceLoader.Load<PackedScene>("Game/CityUI.tscn");
 
-    private TerrainTileUI TerrainTileUI
+  private CityUI CityUI
+  {
+
+    get => _cityUI;
+    set
     {
+      HideAllPopups();
 
-        get => _terrainTileUI; 
-        set
-        {
-            _terrainTileUI?.QueueFree();
-            _terrainTileUI = value;
-        }
+      _cityUI?.QueueFree();
+      _cityUI = value;
     }
+  }
 
-    public override void _Ready()
+  private TerrainTileUI TerrainTileUI
+  {
+
+    get => _terrainTileUI;
+    set
     {
-        base._Ready();
+      HideAllPopups();
 
-        TerrainUIScene = ResourceLoader.Load<PackedScene>("Game/TerrainTileUI.tscn");
+      _terrainTileUI = value;
     }
+  }
 
+  public void HideAllPopups()
+  {
+    _terrainTileUI?.QueueFree();
+    _terrainTileUI = null;
 
-    public void HideAllPopups()
-    {
-        _terrainTileUI?.QueueFree();
-        _terrainTileUI = null;
-    }
+    _cityUI?.QueueFree();
+    _cityUI = null;
+  }
 
-    public void UpdateTerrainInfoUI(Hex hex)
-    {
-        TerrainTileUI = (TerrainTileUI)TerrainUIScene.Instantiate();
-        AddChild(TerrainTileUI);
-        TerrainTileUI.Hex = hex;
-    }
+  public void UpdateTerrainInfoUI(Hex hex)
+  {
+    TerrainTileUI = (TerrainTileUI)TerrainUIScene.Instantiate();
+    AddChild(TerrainTileUI);
+    TerrainTileUI.Hex = hex;
+  }
+
+  public void UpdateCityInfoUI(City city)
+  {
+    CityUI = (CityUI)CityUIScene.Instantiate();
+    AddChild(CityUI);
+    CityUI.City = city;
+  }
 }
