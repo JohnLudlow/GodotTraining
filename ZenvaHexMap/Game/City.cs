@@ -1,5 +1,6 @@
 using Godot;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -45,7 +46,7 @@ public partial class City : Node2D
     }
   }
 
-  public void ProcessTurn() 
+  public void ProcessTurn()
   {
     PopulationGrowthTracker += TotalFood;
 
@@ -54,6 +55,9 @@ public partial class City : Node2D
       Population++;
       PopulationGrowthTracker = 0;
       PopulationGrowthThreshold += PopulationThresholdIncrease;
+
+      AddRandomNewTile();
+      Map.UpdateCivTerritoryMap(_ownerCivilization);
     }
   }
 
@@ -70,4 +74,31 @@ public partial class City : Node2D
       CityTerritory.Add(hex);
     }
   }
+
+  private void AddRandomNewTile()
+  {
+    if (BorderTilePool.Count > 0)
+    {
+      var rand = new Random();
+      var index = rand.Next(BorderTilePool.Count);
+
+      AddTerritory([BorderTilePool[index]]);
+      BorderTilePool.RemoveAt(index);
+    }
+  }
+
+  private void AddValidNeighboursToBorderPool(Hex hex)
+  {
+    foreach (var n in Map.GetAdjacentHexes(hex.Coordinates))
+    {
+      if (IsValidNeightbourTile(n)) BorderTilePool.Add(n);
+
+      InvalidTiles[n] = this;
+    }
+  }
+
+  private bool IsValidNeightbourTile(Hex h)
+    => h.OwnerCity is null &&
+      h.TerrainType is not TerrainTypes.Water and not TerrainTypes.Ice and not TerrainTypes.Mountain &&
+      InvalidTiles.ContainsKey(h) && InvalidTiles[h] != this;
 }

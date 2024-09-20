@@ -291,6 +291,12 @@ public partial class HexTileMap : Node2D
     }
   }
 
+  public IEnumerable<Hex> GetAdjacentHexes(Vector2I coordinates, int distance = 1)
+  {
+    return GetAdjacentCells(coordinates, distance)
+            .Select(c => _mapData[coordinates]);
+  }
+
   private List<Vector2I> GetAdjacentCells(Vector2I coordinates, int distance = 1)
   {
     return GetAdjacentCells(coordinates, distance, []);
