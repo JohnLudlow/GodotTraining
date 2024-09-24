@@ -22,7 +22,7 @@ public class Hex
 
     public override string ToString()
     {
-        return $"{TerrainType} at {Coordinates} => Food {Food}, Production {Production}";
+        return $"{TerrainType} at {Coordinates} => Owner [{OwnerCity?.CityName} ({OwnerCity?.OwnerCivilization?.CivilizationName})] Food {Food}, Production {Production}";
     }
 }
 

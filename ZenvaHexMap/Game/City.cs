@@ -6,16 +6,17 @@ using System.Linq;
 
 namespace ZenvaHexMap.Game;
 
-public partial class City : Node2D
+public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEventArgs<City>>
 {
   public static int PopulationThresholdIncrease {get;} = 15;
-  public static Dictionary<Hex, City> InvalidTiles {get;} = [];
 
   public HexTileMap Map { get; set; }
   public Vector2I CityCentreCoordinates { get; set; }
 
   public List<Hex> CityTerritory { get; } = [];
-  public List<Hex> BorderTilePool { get; } = [];
+  public List<Hex> BorderTilePool
+    => CityTerritory.SelectMany(h => Map.GetAdjacentHexes(h.Coordinates).Where(h => IsValidNeightbourTile(h)))
+                    .Distinct().ToList();
 
   public int Population { get; set; } = 1;
   private int PopulationGrowthThreshold { get; set; }
@@ -58,6 +59,8 @@ public partial class City : Node2D
 
       AddRandomNewTile();
       Map.UpdateCivTerritoryMap(_ownerCivilization);
+
+      PropertyChanged?.Invoke(this, new EntityUpdatedEventArgs<City>(this));
     }
   }
 
@@ -65,6 +68,8 @@ public partial class City : Node2D
   private Label _label;
   private Civilization _ownerCivilization;
   private string _cityName;
+
+  public event EventHandler<EntityUpdatedEventArgs<City>> PropertyChanged;
 
   public void AddTerritory(IEnumerable<Hex> territoryToAdd)
   {
@@ -87,18 +92,6 @@ public partial class City : Node2D
     }
   }
 
-  private void AddValidNeighboursToBorderPool(Hex hex)
-  {
-    foreach (var n in Map.GetAdjacentHexes(hex.Coordinates))
-    {
-      if (IsValidNeightbourTile(n)) BorderTilePool.Add(n);
-
-      InvalidTiles[n] = this;
-    }
-  }
-
-  private bool IsValidNeightbourTile(Hex h)
-    => h.OwnerCity is null &&
-      h.TerrainType is not TerrainTypes.Water and not TerrainTypes.Ice and not TerrainTypes.Mountain &&
-      InvalidTiles.ContainsKey(h) && InvalidTiles[h] != this;
+  private static bool IsValidNeightbourTile(Hex h)
+    => h.OwnerCity is null && (h.TerrainType is not TerrainTypes.Water and not TerrainTypes.Ice and not TerrainTypes.Mountain);
 }

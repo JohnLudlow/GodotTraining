@@ -146,7 +146,10 @@ public partial class HexTileMap : Node2D
 
   public void ProcessTurn()
   {
-    GD.Print($"{_uiManager}");
+    foreach (var civilization in _civs)
+    {
+      civilization.ProcessTurn();
+    }
   }
 
   public Civilization GeneratePlayerCiv(Vector2I start)
@@ -291,16 +294,32 @@ public partial class HexTileMap : Node2D
     }
   }
 
+  private readonly Dictionary<Vector2I, WeakReference<IEnumerable<Hex>>> _adjacencyCache = [];
+  private readonly object _locker = new();
+
+
   public IEnumerable<Hex> GetAdjacentHexes(Vector2I coordinates, int distance = 1)
   {
-    return GetAdjacentCells(coordinates, distance)
-            .Select(c => _mapData[coordinates]);
+    lock (_locker)
+    {
+      if (_adjacencyCache.TryGetValue(coordinates, out var adj) && adj.TryGetTarget(out var hexes))
+      {
+        return hexes;
+      }
+      else
+      {
+        var newHexes = GetAdjacentCells(coordinates, distance).Select(c => _mapData[c]);
+        _adjacencyCache[coordinates] = new WeakReference<IEnumerable<Hex>>(newHexes);      
+
+        return newHexes;
+      }
+
+    }
   }
 
-  private List<Vector2I> GetAdjacentCells(Vector2I coordinates, int distance = 1)
-  {
-    return GetAdjacentCells(coordinates, distance, []);
-  }
+  private List<Vector2I> GetAdjacentCells(Vector2I coordinates, int distance = 1) 
+    => GetAdjacentCells(coordinates, distance, []);
+
   private List<Vector2I> GetAdjacentCells(Vector2I coordinates, int distance, List<Vector2I> cells)
   {
     foreach (var adj in _baseLayer.GetSurroundingCells(coordinates))
@@ -320,9 +339,7 @@ public partial class HexTileMap : Node2D
   }
 
   public bool HexInBounds(Vector2I coordinates)
-  {
-    return _mapData.ContainsKey(coordinates);
-  }
+    => _mapData.ContainsKey(coordinates);
 
   public void GenerateResources()
   {
@@ -511,7 +528,6 @@ public partial class HexTileMap : Node2D
     return (noiseMax, noiseMap);
   }
 
-  public Vector2 MapToLocal(Vector2I coords) => _baseLayer.MapToLocal(coords);
-
+  public Vector2 MapToLocal(Vector2I coords)
+    => _baseLayer.MapToLocal(coords);
 }
-
