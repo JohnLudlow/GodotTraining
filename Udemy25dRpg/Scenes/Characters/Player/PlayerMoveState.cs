@@ -9,24 +9,24 @@ public partial class PlayerMoveState : PlayerState
 
     public override void _PhysicsProcess(double delta)
     {
-        if (_characterNode.Direction == Vector2.Zero)
+        if (CharacterNode.Direction == Vector2.Zero)
         {
-            _characterNode.StateMachineNode.SwitchState<PlayerIdleState>();
+            CharacterNode.StateMachineNode.SwitchState<PlayerIdleState>();
             return;
         }
 
-        _characterNode.Velocity = new(
-            _characterNode.Direction.X * MoveFactor,
+        CharacterNode.Velocity = new(
+            CharacterNode.Direction.X * MoveFactor,
             0,
-            _characterNode.Direction.Y * MoveFactor
+            CharacterNode.Direction.Y * MoveFactor
         );
 
-        _characterNode.MoveAndSlide();
-        _characterNode.ApplyFloorSnap();
-        _characterNode.FlipSprite();
+        CharacterNode.MoveAndSlide();
+        CharacterNode.ApplyFloorSnap();
+        CharacterNode.FlipSprite();
     }
 
-    protected override void EnterState() => _characterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Move));
+    protected override void EnterState() => CharacterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Move));
 
     public override void _Input(InputEvent @event)
     {

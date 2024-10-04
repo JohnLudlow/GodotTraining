@@ -15,31 +15,31 @@ public partial class PlayerDashState : StateMachineStateBase
         base._Ready();
 
         DashTimer.Timeout += () => { 
-            _characterNode.StateMachineNode.SwitchState<PlayerIdleState>();
-            _characterNode.Velocity = Vector3.Zero;
+            CharacterNode.StateMachineNode.SwitchState<PlayerIdleState>();
+            CharacterNode.Velocity = Vector3.Zero;
         };
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        _characterNode.MoveAndSlide();
-        _characterNode.ApplyFloorSnap();
-        _characterNode.FlipSprite();
+        CharacterNode.MoveAndSlide();
+        CharacterNode.ApplyFloorSnap();
+        CharacterNode.FlipSprite();
     }
 
     protected override void EnterState()
     {
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Dash));
+        CharacterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Dash));
 
-        if (_characterNode.Velocity == Vector3.Zero)
+        if (CharacterNode.Velocity == Vector3.Zero)
         {
-            _characterNode.Velocity = _characterNode.AnimatedSprite3DNode.FlipH ? Vector3.Left : Vector3.Right;
+            CharacterNode.Velocity = CharacterNode.AnimatedSprite3DNode.FlipH ? Vector3.Left : Vector3.Right;
         }
 
-        _characterNode.Velocity = new (
-            _characterNode.Direction.X * DashSpeed, 
+        CharacterNode.Velocity = new (
+            CharacterNode.Direction.X * DashSpeed, 
             0, 
-            _characterNode.Direction.Y * DashSpeed
+            CharacterNode.Direction.Y * DashSpeed
         );
         
         DashTimer.Start();
@@ -49,7 +49,7 @@ public partial class PlayerDashState : StateMachineStateBase
     {
         if (Input.IsActionJustReleased(nameof(Player.PlayerInputs.Dash)))
         {
-            _characterNode.StateMachineNode.SwitchState<PlayerIdleState>();
+            CharacterNode.StateMachineNode.SwitchState<PlayerIdleState>();
         }
     }
 }

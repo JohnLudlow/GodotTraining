@@ -8,37 +8,37 @@ public partial class EnemyReturnState : EnemyState
     {
         base._Ready();
 
-        _destination = 
-            _characterNode.PathNode.Curve.GetPointPosition(0) +
-            _characterNode.PathNode.GlobalPosition;
+        Destination = 
+            CharacterNode.PathNode.Curve.GetPointPosition(0) +
+            CharacterNode.PathNode.GlobalPosition;
     }
 
     protected override void ExitState()
     {
         base.ExitState();
 
-        _characterNode.ChaseAreaNode.BodyEntered -= HandleChaseAreaBodyEntered;        
+        CharacterNode.ChaseAreaNode.BodyEntered -= HandleChaseAreaBodyEntered;        
     }
 
     protected override void EnterState()
     {
         base.EnterState();
 
-        _characterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;        
+        CharacterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;        
 
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
-        _characterNode.NavigationAgentNode.TargetPosition = _destination;
+        CharacterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
+        CharacterNode.NavigationAgentNode.TargetPosition = Destination;
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (_characterNode.NavigationAgentNode.IsNavigationFinished())
+        if (CharacterNode.NavigationAgentNode.IsNavigationFinished())
         {
-            _characterNode.StateMachineNode.SwitchState<EnemyPatrolState>();
+            CharacterNode.StateMachineNode.SwitchState<EnemyPatrolState>();
             return;
         }
 
-        _characterNode.Velocity = _characterNode.GlobalPosition.DirectionTo(_destination);
-        _characterNode.MoveAndSlide();
+        CharacterNode.Velocity = CharacterNode.GlobalPosition.DirectionTo(Destination);
+        CharacterNode.MoveAndSlide();
     }
 }

@@ -8,11 +8,11 @@ public abstract partial class PlayerState : StateMachineStateBase
     {
         if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Dash)))
         {
-            _characterNode.StateMachineNode.SwitchState<PlayerDashState>();
+            CharacterNode.StateMachineNode.SwitchState<PlayerDashState>();
         }
         else if (Input.IsActionJustPressed(nameof(Player.PlayerInputs.Attack)))
         {
-            _characterNode.StateMachineNode.SwitchState<PlayerAttackState>();
+            CharacterNode.StateMachineNode.SwitchState<PlayerAttackState>();
         }
     }
 }

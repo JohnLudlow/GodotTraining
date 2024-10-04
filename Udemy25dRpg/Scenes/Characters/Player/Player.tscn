@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://2als0j8j6wxe"]
+[gd_scene load_steps=71 format=3 uid="uid://2als0j8j6wxe"]
 
 [ext_resource type="Script" path="res://Scenes/Characters/Player/Player.cs" id="1_huxwr"]
 [ext_resource type="Texture2D" uid="uid://y4hs6pyks4tw" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_000.png" id="2_2r0yv"]
@@ -282,7 +282,11 @@ height = 1.4337
 [sub_resource type="BoxShape3D" id="BoxShape3D_md32l"]
 size = Vector3(0.5, 0.5, 0.5)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode")]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y4e0i"]
+radius = 0.556113
+height = 1.47419
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode", "HurtboxAreaNode", "HitboxAreaNode", "HitboxShapeNode")]
 collision_layer = 2
 collision_mask = 7
 floor_max_angle = 1.55334
@@ -290,11 +294,14 @@ floor_snap_length = 100.0
 script = ExtResource("1_huxwr")
 StateMachineNode = NodePath("StateMachine")
 AnimatedSprite3DNode = NodePath("AnimatedSprite3D")
+HurtboxAreaNode = NodePath("Hurtbox")
+HitboxAreaNode = NodePath("Hitbox")
+HitboxShapeNode = NodePath("Hitbox/CollisionShape3D")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 pixel_size = 0.0025
 sprite_frames = SubResource("SpriteFrames_4gqhn")
-animation = &"Idle"
+animation = &"Slash"
 
 [node name="StateMachine" parent="." node_paths=PackedStringArray("CurrentState", "PossibleStates") instance=ExtResource("50_wog05")]
 CurrentState = NodePath("IdleState")
@@ -327,10 +334,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0281069, 0.0163012, -0.0001
 shape = SubResource("CapsuleShape3D_5puhm")
 
 [node name="Hitbox" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.557424, 0, 0)
 collision_layer = 2
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0960511, 0)
 shape = SubResource("BoxShape3D_md32l")
+disabled = true
+
+[node name="Hurtbox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0483896, 0.0280536, 0)
+shape = SubResource("CapsuleShape3D_y4e0i")

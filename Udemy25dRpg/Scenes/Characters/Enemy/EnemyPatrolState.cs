@@ -10,27 +10,27 @@ public partial class EnemyPatrolState : EnemyState
     [Export(PropertyHint.Range, "0, 20, .1")]
     public float MaxIdleTime { get; set; } = 4;
 
-    private int _pathNodeIndex = 0;
+    private int _pathNodeIndex;
 
-    protected override void ExitState()
+  protected override void ExitState()
     {
-        _characterNode.NavigationAgentNode.NavigationFinished -= HandleNavigationFinished;
-        _characterNode.ChaseAreaNode.BodyEntered -= HandleChaseAreaBodyEntered;
-        
+        CharacterNode.NavigationAgentNode.NavigationFinished -= HandleNavigationFinished;
+        CharacterNode.ChaseAreaNode.BodyEntered -= HandleChaseAreaBodyEntered;
+
         IdleTimerNode.Timeout -= HandleTimerTimeout;
         IdleTimerNode.Stop();
     }
 
     protected override void EnterState()
     {
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
-        _characterNode.NavigationAgentNode.NavigationFinished += HandleNavigationFinished;
-        _characterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;
+        CharacterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
+        CharacterNode.NavigationAgentNode.NavigationFinished += HandleNavigationFinished;
+        CharacterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;
 
         _pathNodeIndex = 1;
-        _destination = GetPointGlobalPosition(_pathNodeIndex);                
+        Destination = GetPointGlobalPosition(_pathNodeIndex);                
 
-        _characterNode.NavigationAgentNode.TargetPosition = _destination;
+        CharacterNode.NavigationAgentNode.TargetPosition = Destination;
 
         IdleTimerNode.Timeout += HandleTimerTimeout;
     }
@@ -39,16 +39,16 @@ public partial class EnemyPatrolState : EnemyState
     {
         IdleTimerNode.Stop();
 
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
+        CharacterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
 
-        _pathNodeIndex = Mathf.Wrap(_pathNodeIndex + 1, 0, _characterNode.PathNode.Curve.PointCount);
-        _destination = GetPointGlobalPosition(_pathNodeIndex);
-        _characterNode.NavigationAgentNode.TargetPosition = _destination;
+        _pathNodeIndex = Mathf.Wrap(_pathNodeIndex + 1, 0, CharacterNode.PathNode.Curve.PointCount);
+        Destination = GetPointGlobalPosition(_pathNodeIndex);
+        CharacterNode.NavigationAgentNode.TargetPosition = Destination;
     }
 
     private void HandleNavigationFinished()
     {
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Idle));
+        CharacterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Idle));
 
         IdleTimerNode.WaitTime = new RandomNumberGenerator().RandfRange(0, MaxIdleTime);
         IdleTimerNode.Start();

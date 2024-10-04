@@ -8,22 +8,22 @@ public partial class PlayerIdleState : PlayerState
     {
         base._Ready();
 
-        _characterNode.AnimatedSprite3DNode.AnimationFinished += () => {             
-            _characterNode.StateMachineNode.SwitchState<PlayerIdleState>(); 
+        CharacterNode.AnimatedSprite3DNode.AnimationFinished += () => {             
+            CharacterNode.StateMachineNode.SwitchState<PlayerIdleState>(); 
         };
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (_characterNode.Direction != Vector2.Zero)
+        if (CharacterNode.Direction != Vector2.Zero)
         {
-            _characterNode.StateMachineNode.SwitchState<PlayerMoveState>();
+            CharacterNode.StateMachineNode.SwitchState<PlayerMoveState>();
         }
     }
 
     protected override void EnterState()
     {
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Idle));
+        CharacterNode.AnimatedSprite3DNode.Play(nameof(Player.PlayerAnimations.Idle));
     }
 
     public override void _Input(InputEvent @event)

@@ -11,10 +11,10 @@ config_version=5
 [application]
 
 config/name="Udemy25dRpg"
+config/tags=PackedStringArray("c#", "udemy")
 run/main_scene="res://Scenes/Levels/Main.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 config/icon="res://Assets/castle.svg"
-config/tags=PackedStringArray("c#", "udemy")
 
 [display]
 

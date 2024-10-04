@@ -14,8 +14,8 @@ public partial class EnemyChaseState : EnemyState
     {
         base.ExitState();
 
-        _characterNode.AttackAreaNode.BodyEntered -= HandleAttackAreaBodyEntered;
-        _characterNode.ChaseAreaNode.BodyExited -= HandleChaseAreaBodyExited;
+        CharacterNode.AttackAreaNode.BodyEntered -= HandleAttackAreaBodyEntered;
+        CharacterNode.ChaseAreaNode.BodyExited -= HandleChaseAreaBodyExited;
 
         TimerNode.Timeout -= HandleTimerTimeout;
         TimerNode.Stop();
@@ -25,26 +25,26 @@ public partial class EnemyChaseState : EnemyState
     {
         base.EnterState();
 
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
+        CharacterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Move));
         
-        _characterNode.AttackAreaNode.BodyEntered += HandleAttackAreaBodyEntered;
-        _characterNode.ChaseAreaNode.BodyExited += HandleChaseAreaBodyExited;
+        CharacterNode.AttackAreaNode.BodyEntered += HandleAttackAreaBodyEntered;
+        CharacterNode.ChaseAreaNode.BodyExited += HandleChaseAreaBodyExited;
 
-        _target = _characterNode.ChaseAreaNode.GetOverlappingBodies().OfType<CharacterBody3D>().First();
+        _target = CharacterNode.ChaseAreaNode.GetOverlappingBodies().OfType<CharacterBody3D>().First();
 
         TimerNode.Timeout += HandleTimerTimeout;
         TimerNode.Start();
     }
 
-    private void HandleChaseAreaBodyExited(Node3D body) => _characterNode.StateMachineNode.SwitchState<EnemyReturnState>();
+    private void HandleChaseAreaBodyExited(Node3D body) => CharacterNode.StateMachineNode.SwitchState<EnemyReturnState>();
 
-    private void HandleAttackAreaBodyEntered(Node3D body) => _characterNode.StateMachineNode.SwitchState<EnemyAttackState>();
+    private void HandleAttackAreaBodyEntered(Node3D body) => CharacterNode.StateMachineNode.SwitchState<EnemyAttackState>();
 
 
     private void HandleTimerTimeout()
     {
-        _destination = _target.GlobalPosition;
-        _characterNode.NavigationAgentNode.TargetPosition = _destination;        
+        Destination = _target.GlobalPosition;
+        CharacterNode.NavigationAgentNode.TargetPosition = Destination;        
     }
 
 

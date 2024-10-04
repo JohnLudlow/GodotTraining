@@ -6,13 +6,13 @@ public partial class EnemyIdleState : EnemyState
     {
         base.ExitState();
 
-        _characterNode.ChaseAreaNode.BodyEntered -= HandleChaseAreaBodyEntered;        
+        CharacterNode.ChaseAreaNode.BodyEntered -= HandleChaseAreaBodyEntered;        
     }
 
     protected override void EnterState()
     {
-        _characterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Idle));
-        _characterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;
+        CharacterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Idle));
+        CharacterNode.ChaseAreaNode.BodyEntered += HandleChaseAreaBodyEntered;
     }
 
 
@@ -20,9 +20,9 @@ public partial class EnemyIdleState : EnemyState
     {
         base._PhysicsProcess(delta);
 
-        if (_characterNode.NavigationAgentNode.IsNodeReady())
+        if (CharacterNode.NavigationAgentNode.IsNodeReady())
         {
-            _characterNode.StateMachineNode.SwitchState<EnemyReturnState>();
+            CharacterNode.StateMachineNode.SwitchState<EnemyReturnState>();
         }
     }
 }

@@ -4,13 +4,13 @@ namespace Udemy25dRpg.Scenes.Characters;
 
 public abstract partial class StateMachineStateBase : Node 
 {   
-    protected CharacterBase _characterNode;
+    protected CharacterBase CharacterNode {get;set;}
 
     public override void _Ready()
     {
         base._Ready();
         
-        _characterNode = GetOwner<CharacterBase>();
+        CharacterNode = GetOwner<CharacterBase>();
     
         SetPhysicsProcess(false);
         SetProcessInput(false);
