@@ -1,7 +1,8 @@
-[gd_scene load_steps=71 format=3 uid="uid://2als0j8j6wxe"]
+[gd_scene load_steps=73 format=3 uid="uid://2als0j8j6wxe"]
 
 [ext_resource type="Script" path="res://Scenes/Characters/Player/Player.cs" id="1_huxwr"]
 [ext_resource type="Texture2D" uid="uid://y4hs6pyks4tw" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_000.png" id="2_2r0yv"]
+[ext_resource type="Script" path="res://Resources/StatsResource.cs" id="2_g1k4d"]
 [ext_resource type="Texture2D" uid="uid://b7lhym3wvu5j6" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_001.png" id="3_5244l"]
 [ext_resource type="Texture2D" uid="uid://cfcjcof4e5sim" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_002.png" id="4_w2fvd"]
 [ext_resource type="Texture2D" uid="uid://ca4skkqngti21" path="res://Assets/Sprites/Characters/Player/Idle Blinking/Idle Blinking_003.png" id="5_02man"]
@@ -66,6 +67,16 @@
 [ext_resource type="Texture2D" uid="uid://dhdjse48ubn44" path="res://Assets/Sprites/Characters/Player/Slashing/Slashing_010.png" id="60_i5a4m"]
 [ext_resource type="Texture2D" uid="uid://cyfm2fm4spldt" path="res://Assets/Sprites/Characters/Player/Slashing/Slashing_011.png" id="61_31xsh"]
 [ext_resource type="Script" path="res://Scenes/Characters/Player/PlayerAttackState.cs" id="67_vydjt"]
+
+[sub_resource type="Resource" id="Resource_n7n7n"]
+script = ExtResource("2_g1k4d")
+StatType = 0
+StatValue = 100.0
+
+[sub_resource type="Resource" id="Resource_ymsa8"]
+script = ExtResource("2_g1k4d")
+StatType = 1
+StatValue = 5.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4gqhn"]
 animations = [{
@@ -282,16 +293,13 @@ height = 1.4337
 [sub_resource type="BoxShape3D" id="BoxShape3D_md32l"]
 size = Vector3(0.5, 0.5, 0.5)
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y4e0i"]
-radius = 0.556113
-height = 1.47419
-
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("StateMachineNode", "AnimatedSprite3DNode", "HurtboxAreaNode", "HitboxAreaNode", "HitboxShapeNode")]
 collision_layer = 2
 collision_mask = 7
 floor_max_angle = 1.55334
 floor_snap_length = 100.0
 script = ExtResource("1_huxwr")
+Stats = [SubResource("Resource_n7n7n"), SubResource("Resource_ymsa8")]
 StateMachineNode = NodePath("StateMachine")
 AnimatedSprite3DNode = NodePath("AnimatedSprite3D")
 HurtboxAreaNode = NodePath("Hurtbox")
@@ -343,7 +351,9 @@ shape = SubResource("BoxShape3D_md32l")
 disabled = true
 
 [node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0483896, 0.0280536, 0)
-shape = SubResource("CapsuleShape3D_y4e0i")
+shape = SubResource("CapsuleShape3D_5puhm")

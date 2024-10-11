@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 
 using Godot;
@@ -40,9 +39,12 @@ public abstract partial class CharacterBase : CharacterBody3D
 
   private void HurtboxAreaNode_AreaEntered(Area3D area)
   {
-    var health = Stats.FirstOrDefault(st => st.StatType == StatType.Health);
-    var player = area.GetOwner<CharacterBase>();
-    health.StatValue -= player.Stats.FirstOrDefault(s => s.StatType == StatType.Strength)?.StatValue ?? 0;
+    var attacker = area.GetOwner<CharacterBase>();
+
+    var myHealth = Stats.FirstOrDefault(s => s.StatType == StatType.Health);
+    var attackStrength = attacker.Stats.FirstOrDefault(s => s.StatType == StatType.Strength);
+
+    myHealth.StatValue -= attackStrength?.StatValue ?? 0;
   }
 
   public Vector2 Direction { get; protected set; } = Vector2.Zero;

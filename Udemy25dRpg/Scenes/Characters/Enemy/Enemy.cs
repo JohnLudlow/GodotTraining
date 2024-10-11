@@ -1,5 +1,3 @@
-using Godot;
-
 namespace Udemy25dRpg.Scenes.Characters.Enemy;
 
 public partial class Enemy : CharacterBase
