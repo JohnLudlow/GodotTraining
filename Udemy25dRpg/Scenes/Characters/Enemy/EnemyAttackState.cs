@@ -54,7 +54,9 @@ public partial class EnemyAttackState : EnemyState
       .OfType<Player.Player>()
       .Any())
     {
-      EnterState();
+      PerformHit();
+
+      CharacterNode.AnimatedSprite3DNode.Play(nameof(Enemy.EnemyAnimations.Attack));
     }
     else
     {      
