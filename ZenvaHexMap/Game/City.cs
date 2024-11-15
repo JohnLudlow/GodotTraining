@@ -35,7 +35,7 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
   // public Unit? CurrentlyBuilding => BuildQueue.FirstOrDefault();
 
   public List<Unit> BuildQueue {get;} = [];
-  public Unit? CurrentlyBuilding {get;}
+  public Unit? CurrentlyBuilding {get;set;}
   public int UnitProductionCompleted {get;set;}
 
   public Civilization? OwnerCivilization
@@ -75,8 +75,10 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
       if (_ownerCivilization is not null)
         Map?.UpdateCivTerritoryMap(_ownerCivilization);
 
-      PropertyChanged?.Invoke(this, new EntityUpdatedEventArgs<City>(this));
     }
+
+    ProcessUnitBuildQueue();
+    PropertyChanged?.Invoke(this, new EntityUpdatedEventArgs<City>(this));
   }
 
   public void SpawnUnit(Unit unit)
@@ -86,6 +88,25 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
     var toSpawn = (Unit)Unit.UnitSceneResources[unit.GetType()].Instantiate();
     toSpawn.OwnerCivilization = OwnerCivilization;
     toSpawn.Position = Map.MapToLocal(CityCentreCoordinates);
+    toSpawn.UnitCoordinates = CityCentreCoordinates;
+
+    Map.AddChild(toSpawn);
+  }
+
+  public void ProcessUnitBuildQueue()
+  {
+    if (BuildQueue.Count == 0) return;
+
+    CurrentlyBuilding ??= BuildQueue.FirstOrDefault();
+    UnitProductionCompleted += TotalProduction;
+
+    if (UnitProductionCompleted >= CurrentlyBuilding?.ProductionRequired)
+    {
+      SpawnUnit(CurrentlyBuilding);
+      BuildQueue.RemoveAt(0);
+      CurrentlyBuilding = null;
+      UnitProductionCompleted = 0;
+    }
   }
 
   private Sprite2D? _sprite;

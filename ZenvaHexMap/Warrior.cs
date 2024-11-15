@@ -5,8 +5,9 @@ namespace ZenvaHexMap.Game;
 
 public partial class Warrior : Unit
 {
-  public Warrior() : base("Warrior", 50)
+  public Warrior()
   {
-
+    UnitName = "Warrior";
+    ProductionRequired = 50;
   }
 }

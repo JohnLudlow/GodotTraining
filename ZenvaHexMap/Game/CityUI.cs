@@ -48,17 +48,15 @@ public partial class CityUI : Panel
 
   private void City_PropertyChanged(object? sender, EntityUpdatedEventArgs<City>? e)
   {
-    if (_cityNameLabel is not null)
-      _cityNameLabel.Text = _city?.CityName;
+    _cityNameLabel = GetNode<Label>("CityName");
+    _cityPopLabel  = GetNode<Label>("Population");
+    _cityFoodLabel = GetNode<Label>("Food");
+    _cityProdLabel = GetNode<Label>("Production");
 
-    if (_cityPopLabel is not null)
-      _cityPopLabel.Text  = $"Population : {_city?.Population}";
-  
-    if (_cityFoodLabel is not null)
-      _cityFoodLabel.Text = $"Food : {_city?.TotalFood}";
-    
-    if (_cityProdLabel is not null)
-      _cityProdLabel.Text = $"Production : {_city?.TotalProduction}";
+    _cityNameLabel.Text = _city?.CityName;
+    _cityPopLabel.Text  = $"Population : {_city?.Population}";
+    _cityFoodLabel.Text = $"Food : {_city?.TotalFood}";
+    _cityProdLabel.Text = $"Production : {_city?.TotalProduction}";
 
     PopulateBuildQueue();
   }
