@@ -5,7 +5,7 @@ namespace ZenvaHexMap.Game;
 
 public partial class Settler : Unit
 {
-  public Settler(Civilization ownerCivilization) : base(ownerCivilization, "Settler", 100)
+  public Settler() : base("Settler", 100)
   {
 
   }

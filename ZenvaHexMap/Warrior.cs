@@ -5,7 +5,7 @@ namespace ZenvaHexMap.Game;
 
 public partial class Warrior : Unit
 {
-  public Warrior(Civilization ownerCivilization) : base(ownerCivilization, "Warrior", 50)
+  public Warrior() : base("Warrior", 50)
   {
 
   }

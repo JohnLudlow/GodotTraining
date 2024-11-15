@@ -38,11 +38,11 @@ public partial class CityUI : Panel
     var buttons = GetNode<VBoxContainer>("BuildMenuContainer/VBoxContainer");
 
     var settlerButton = buttons.GetNode<BuildUnitButton>("BuildSettlerButton");
-    settlerButton.Unit = new Settler(_city.OwnerCivilization);
+    settlerButton.Unit = new Settler();
     settlerButton.OnPressed += _city.AddUnitToBuildQueue;
     
     var warriorButton = buttons.GetNode<BuildUnitButton>("BuildWarriorButton");
-    warriorButton.Unit = new Warrior(_city.OwnerCivilization);
+    warriorButton.Unit = new Warrior();
     warriorButton.OnPressed += _city.AddUnitToBuildQueue;
   }
 
