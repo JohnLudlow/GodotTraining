@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyunjepqr50wg"]
+[gd_scene load_steps=4 format=3 uid="uid://dyunjepqr50wg"]
 
 [ext_resource type="Script" path="res://Game/CityUI.cs" id="1_gdpka"]
 [ext_resource type="Texture2D" uid="uid://bmuho6fbcohxf" path="res://Assets/UI/city_painting.jpg" id="1_o0aub"]
+[ext_resource type="PackedScene" uid="uid://dc3erj6r2b2ku" path="res://Game/BuildUnitButton.tscn" id="3_17oik"]
 
 [node name="CityUI" type="Panel"]
 offset_right = 250.0
@@ -50,3 +51,50 @@ offset_right = 132.0
 offset_bottom = 298.0
 theme_override_font_sizes/font_size = 16
 text = "Production"
+
+[node name="BuildMenuLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 304.0
+offset_right = 53.0
+offset_bottom = 327.0
+theme_override_font_sizes/font_size = 24
+text = "Build"
+
+[node name="BuildMenuContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 337.0
+offset_right = 235.0
+offset_bottom = 441.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BuildMenuContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BuildSettlerButton" parent="BuildMenuContainer/VBoxContainer" instance=ExtResource("3_17oik")]
+layout_mode = 2
+text = "SETTLER"
+
+[node name="BuildWarriorButton" parent="BuildMenuContainer/VBoxContainer" instance=ExtResource("3_17oik")]
+layout_mode = 2
+text = "WARRIOR"
+
+[node name="BuildQueueLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 438.0
+offset_right = 72.0
+offset_bottom = 472.0
+theme_override_font_sizes/font_size = 24
+text = "Queue"
+
+[node name="BuildQueueContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 483.0
+offset_right = 234.0
+offset_bottom = 620.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BuildQueueContainer"]
+layout_mode = 2

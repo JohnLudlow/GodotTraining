@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dc3erj6r2b2ku"]
+
+[ext_resource type="Script" path="res://Game/BuildUnitButton.cs" id="1_2ex68"]
+
+[node name="BuildUnitButton" type="Button"]
+text = "DEFAULT"
+script = ExtResource("1_2ex68")

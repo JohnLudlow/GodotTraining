@@ -10,13 +10,20 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
 {
   public static int PopulationThresholdIncrease {get;} = 15;
 
-  public HexTileMap Map { get; set; }
+  public HexTileMap? Map { get; set; }
   public Vector2I CityCentreCoordinates { get; set; }
 
   public List<Hex> CityTerritory { get; } = [];
-  public List<Hex> BorderTilePool
-    => CityTerritory.SelectMany(h => Map.GetAdjacentHexes(h.Coordinates).Where(h => IsValidNeightbourTile(h)))
-                    .Distinct().ToList();
+  private List<Hex>? BorderTilePool
+  {
+    get
+    {
+      return Map is null
+        ? null
+        : CityTerritory.SelectMany(h => Map.GetAdjacentHexes(h.Coordinates).Where(h => IsValidNeightbourTile(h)))
+                      .Distinct().ToList();
+    }
+  }
 
   public int Population { get; set; } = 1;
   private int PopulationGrowthThreshold { get; set; }
@@ -24,7 +31,14 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
   public int TotalFood => CityTerritory.Sum(t => t.Food);
   public int TotalProduction => CityTerritory.Sum(t => t.Production);
 
-  public Civilization OwnerCivilization
+  // public Queue<Unit> BuildQueue {get;} = [];
+  // public Unit? CurrentlyBuilding => BuildQueue.FirstOrDefault();
+
+  public List<Unit> BuildQueue {get;} = [];
+  public Unit? CurrentlyBuilding {get;}
+  public int UnitProductionCompleted {get;set;}
+
+  public Civilization? OwnerCivilization
   {
     get => _ownerCivilization;
     set
@@ -32,17 +46,17 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
       _ownerCivilization = value;
 
       _sprite ??= GetNode<Sprite2D>("Sprite2D");
-      _sprite.Modulate = _ownerCivilization.CivilizationTerritoryColor;
+      _sprite.Modulate = _ownerCivilization?.CivilizationTerritoryColor ?? default;
     }
   }
 
-  public string CityName
+  public string? CityName
   {
     get => _cityName;
     set
     {
       _cityName = value;
-      _label ??= GetNode<Label>("Label");
+      _label = GetNode<Label>("Label");
       _label.Text = _cityName;
     }
   }
@@ -58,18 +72,39 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
       PopulationGrowthThreshold += PopulationThresholdIncrease;
 
       AddRandomNewTile();
-      Map.UpdateCivTerritoryMap(_ownerCivilization);
+      if (_ownerCivilization is not null)
+        Map?.UpdateCivTerritoryMap(_ownerCivilization);
 
       PropertyChanged?.Invoke(this, new EntityUpdatedEventArgs<City>(this));
     }
   }
 
-  private Sprite2D _sprite;
-  private Label _label;
-  private Civilization _ownerCivilization;
-  private string _cityName;
+  public void SpawnUnit(Unit unit)
+  {
+    if (Map is null || OwnerCivilization is null) return;
 
-  public event EventHandler<EntityUpdatedEventArgs<City>> PropertyChanged;
+    var toSpawn = (Unit)Unit.UnitSceneResources[unit.GetType()].Instantiate();
+    toSpawn.OwnerCivilization = OwnerCivilization;
+    toSpawn.Position = Map.MapToLocal(CityCentreCoordinates);
+  }
+
+  private Sprite2D? _sprite;
+  private Label? _label;
+  private Civilization? _ownerCivilization;
+  private string? _cityName;
+
+  #region Build Queue
+  public void AddUnitToBuildQueue(Unit unit)
+  {
+    BuildQueue.Add(unit);
+    PropertyChanged?.Invoke(this, new EntityUpdatedEventArgs<City>(this));
+  }
+
+  #endregion
+
+  public event EventHandler<EntityUpdatedEventArgs<City>>? PropertyChanged;
+
+  #region Territory Expansion
 
   public void AddTerritory(IEnumerable<Hex> territoryToAdd)
   {
@@ -82,7 +117,7 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
 
   private void AddRandomNewTile()
   {
-    if (BorderTilePool.Count > 0)
+    if (BorderTilePool is not null && BorderTilePool.Count > 0)
     {
       var rand = new Random();
       var index = rand.Next(BorderTilePool.Count);
@@ -94,4 +129,6 @@ public partial class City : Node2D, INotifyEntityPropertyChanged<EntityUpdatedEv
 
   private static bool IsValidNeightbourTile(Hex h)
     => h.OwnerCity is null && (h.TerrainType is not TerrainTypes.Water and not TerrainTypes.Ice and not TerrainTypes.Mountain);
+
+  #endregion
 }

@@ -4,7 +4,7 @@ namespace ZenvaHexMap.Game;
 
 public partial class GeneralUI : Panel
 {
-  Label _turnLabel;
+  private Label? _turnLabel;
   private int _turnNumber;
 
   public int TurnNumber

@@ -6,9 +6,9 @@ namespace ZenvaHexMap.Game;
 
 public partial class TerrainTileUI : Panel
 {
-  TextureRect _terrainImage;
-  Label _terrainLabel, _foodLabel, _productionLabel;
-  private Hex _hex;
+  TextureRect? _terrainImage;
+  Label? _terrainLabel, _foodLabel, _productionLabel;
+  private Hex? _hex;
 
   private static readonly Dictionary<TerrainTypes, string> _terrainTypeStrings = new()
   {
@@ -41,10 +41,17 @@ public partial class TerrainTileUI : Panel
     {
       _hex = value;
 
-      _terrainImage.Texture = _terrainTypeImages[_hex.TerrainType];
-      _terrainLabel.Text = _terrainTypeStrings[_hex.TerrainType];
-      _foodLabel.Text = $"Food: {value.Food}";
-      _productionLabel.Text = $"Prodution : {value.Production}";
+      if (_terrainImage is not null)
+        _terrainImage.Texture = _terrainTypeImages[_hex.TerrainType];
+      
+      if (_terrainLabel is not null)
+        _terrainLabel.Text = _terrainTypeStrings[_hex.TerrainType];
+
+      if (_foodLabel is not null)
+        _foodLabel.Text = $"Food: {value.Food}";
+
+      if (_productionLabel is not null)      
+        _productionLabel.Text = $"Prodution : {value.Production}";
     }
   }
 

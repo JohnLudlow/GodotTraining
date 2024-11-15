@@ -36,19 +36,19 @@ public partial class HexTileMap : Node2D
   [Signal]
   public delegate void ClickOffMapEventHandler();
 
-  private TileSetAtlasSource _tileSetAtlasSource;
+  private TileSetAtlasSource? _tileSetAtlasSource;
 
   private PackedScene _cityScene = ResourceLoader.Load<PackedScene>("Game/City.tscn");
 
-  private Dictionary<Vector2I, Hex> _mapData;
+  private Dictionary<Vector2I, Hex>? _mapData;
 
-  private Dictionary<TerrainTypes, Vector2I> _terrainTextures;
+  private Dictionary<TerrainTypes, Vector2I>? _terrainTextures;
 
-  private TileMapLayer _baseLayer, _borderLayer, _overlayLayer, _civColorLayer;
+  private TileMapLayer? _baseLayer, _borderLayer, _overlayLayer, _civColorLayer;
 
   private Vector2I _selectedCell = new(-1, -1);
 
-  private UIManager _uiManager;
+  private UIManager? _uiManager;
 
   private readonly Dictionary<Vector2I, City> _cities = [];
   private readonly List<Civilization> _civs = [];
@@ -60,7 +60,7 @@ public partial class HexTileMap : Node2D
   [Signal]
   public delegate void SendCityUIInfoEventHandler(City city);
 
-  public event SendHexDataEventHandler SendHexData;
+  public event SendHexDataEventHandler? SendHexData;
 
   // Called when the node enters the scene tree for the first time.
   public override void _Ready()
@@ -108,6 +108,10 @@ public partial class HexTileMap : Node2D
 
   public override void _UnhandledInput(InputEvent @event)
   {
+    if (_baseLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_baseLayer)} is null");
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+    if (_overlayLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_overlayLayer)} is null");
+
     if (@event is InputEventMouseButton mouseButton)
     {
       var mapCoords = _baseLayer.LocalToMap(GetLocalMousePosition());
@@ -154,6 +158,9 @@ public partial class HexTileMap : Node2D
 
   public Civilization GeneratePlayerCiv(Vector2I start)
   {
+    if (_tileSetAtlasSource is null) throw new InvalidOperationException($"Cannot process input when {nameof(_tileSetAtlasSource)} is null");
+    if (_terrainTextures is null) throw new InvalidOperationException($"Cannot process input when {nameof(_terrainTextures)} is null");
+
     var id = _tileSetAtlasSource.CreateAlternativeTile(_terrainTextures[TerrainTypes.CivColorBase]);
 
     var player = new Civilization()
@@ -176,6 +183,9 @@ public partial class HexTileMap : Node2D
 
   private void GenerateAIPlayerCivs(List<Vector2I> startingLocations)
   {
+    if (_tileSetAtlasSource is null) throw new InvalidOperationException($"Cannot process input when {nameof(_tileSetAtlasSource)} is null");
+    if (_terrainTextures is null) throw new InvalidOperationException($"Cannot process input when {nameof(_terrainTextures)} is null");
+
     for (var i = 0; i < startingLocations.Count; i++)
     {
       var civ = new Civilization
@@ -199,6 +209,9 @@ public partial class HexTileMap : Node2D
 
   public void CreateCity(Civilization civilization, Vector2I coordinates, string cityName)
   {
+    if (_baseLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_baseLayer)} is null");
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+
     var city = _cityScene.Instantiate<City>();
     city.Map = this;
     city.OwnerCivilization = civilization;
@@ -227,6 +240,9 @@ public partial class HexTileMap : Node2D
 
   private List<Vector2I> GenerateStartingLocations(int count)
   {
+    if (_baseLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_baseLayer)} is null");
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+    
     var locations = new List<Vector2I>();
     var plainsLocations = _mapData.Values
         .Where(h => h.TerrainType == TerrainTypes.Plains)
@@ -264,6 +280,8 @@ public partial class HexTileMap : Node2D
 
   private bool IsValidStartingLocation(Vector2I coordinates, IEnumerable<Vector2I> locations)
   {
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+
     if (
         !_mapData.ContainsKey(coordinates) ||
 
@@ -284,6 +302,8 @@ public partial class HexTileMap : Node2D
 
   public void UpdateCivTerritoryMap(Civilization civilization)
   {
+    if (_terrainTextures is null) throw new InvalidOperationException($"Cannot process input when {nameof(_terrainTextures)} is null");
+    if (_civColorLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_civColorLayer)} is null");
     foreach (var city in civilization.Cities)
     {
       foreach (var hex in city.CityTerritory)
@@ -300,6 +320,9 @@ public partial class HexTileMap : Node2D
 
   public IEnumerable<Hex> GetAdjacentHexes(Vector2I coordinates, int distance = 1)
   {
+    if (_baseLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_baseLayer)} is null");
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+    
     lock (_locker)
     {
       if (_adjacencyCache.TryGetValue(coordinates, out var adj) && adj.TryGetTarget(out var hexes))
@@ -322,6 +345,9 @@ public partial class HexTileMap : Node2D
 
   private List<Vector2I> GetAdjacentCells(Vector2I coordinates, int distance, List<Vector2I> cells)
   {
+    if (_baseLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_baseLayer)} is null");
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+    
     foreach (var adj in _baseLayer.GetSurroundingCells(coordinates))
     {
       if (distance > 1 && !cells.Contains(adj))
@@ -339,10 +365,12 @@ public partial class HexTileMap : Node2D
   }
 
   public bool HexInBounds(Vector2I coordinates)
-    => _mapData.ContainsKey(coordinates);
+    => _mapData?.ContainsKey(coordinates) ?? false;
 
   public void GenerateResources()
   {
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+
     var r = new Random();
     for (var x = 0; x < Width; x++)
     {
@@ -435,6 +463,10 @@ public partial class HexTileMap : Node2D
 
   private void DrawIceCap(Random random, int maxIce = 5)
   {
+    if (_baseLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_baseLayer)} is null");
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+    if (_terrainTextures is null) throw new InvalidOperationException($"Cannot process input when {nameof(_terrainTextures)} is null");
+    
     for (var x = 0; x < Width; x++)
     {
       for (var y = 0; y < random.Next(1, maxIce) + 1; y++)
@@ -463,6 +495,11 @@ public partial class HexTileMap : Node2D
       float overrideMax,
       TerrainTypes overrideTerrainType)
   {
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+    if (_terrainTextures is null) throw new InvalidOperationException($"Cannot process input when {nameof(_terrainTextures)} is null");
+    if (_baseLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_baseLayer)} is null");
+    if (_borderLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_borderLayer)} is null");
+
     for (var x = 0; x < Width; x++)
     {
       for (var y = 0; y < Height; y++)
@@ -490,6 +527,11 @@ public partial class HexTileMap : Node2D
 
   private void DrawTerrain(float[,] noiseMap, IEnumerable<(float min, float max, TerrainTypes terrainType)> terrainRanges)
   {
+    if (_mapData is null) throw new InvalidOperationException($"Cannot process input when {nameof(_mapData)} is null");
+    if (_terrainTextures is null) throw new InvalidOperationException($"Cannot process input when {nameof(_terrainTextures)} is null");
+    if (_baseLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_baseLayer)} is null");
+    if (_borderLayer is null) throw new InvalidOperationException($"Cannot process input when {nameof(_borderLayer)} is null");
+
     for (var x = 0; x < Width; x++)
     {
       for (var y = 0; y < Height; y++)
@@ -529,5 +571,5 @@ public partial class HexTileMap : Node2D
   }
 
   public Vector2 MapToLocal(Vector2I coords)
-    => _baseLayer.MapToLocal(coords);
+    => _baseLayer?.MapToLocal(coords) ?? default;
 }

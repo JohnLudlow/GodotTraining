@@ -12,7 +12,7 @@ public partial class Camera : Camera2D
 
   private float _leftBound, _rightBound, _topBound, _bottomBound;
 
-  private HexTileMap _map;
+  private HexTileMap? _map;
 
   // Called when the node enters the scene tree for the first time.
   public override void _Ready()

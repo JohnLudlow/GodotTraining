@@ -8,7 +8,7 @@ public class Hex
     public int Food { get; set; }
     public int Production { get; set; }
 
-    public City OwnerCity { get; set; }
+    public City? OwnerCity { get; set; }
 
     public bool IsCityCenter { get; set; }
 
